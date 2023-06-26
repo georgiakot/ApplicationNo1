@@ -24,6 +24,7 @@ namespace ApplicationNo1.Users.Vehicles
             else
             {
                 _fuelLevel -= distance * _factor;
+                _kmCounter += distance;
                 return true;
             }
         

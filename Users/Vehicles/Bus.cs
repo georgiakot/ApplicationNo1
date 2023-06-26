@@ -22,6 +22,7 @@
             else
             {
                 _fuelLevel -= distance * _factor;
+                _kmCounter += distance;
                 return true;
             }
 

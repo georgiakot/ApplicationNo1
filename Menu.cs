@@ -444,6 +444,8 @@ namespace ApplicationNo1
                 MenuOptions();
             }
         }
+
+      
         
          #endregion
 
@@ -487,7 +489,7 @@ namespace ApplicationNo1
             {
                 var index = _usersList.IndexOf(user) + 1;
                 InsertWriteLine($"{index}) Name:{user.Name}, Age:{user.Age}, Starting destination: {user.Country.Name}, " +
-                    $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} Created:{user.CreationTime.ToString("h:mm:ss tt")}");
+                    $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.Country.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
             }
         }
         #endregion
