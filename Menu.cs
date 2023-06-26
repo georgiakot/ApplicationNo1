@@ -111,6 +111,7 @@ namespace ApplicationNo1
         {
             CheckUsersAmount();
 
+            //Chris - This could be called automatically from MenuOptions (whenever a menu change happens)
             InsertWriteLine($"--- {_currentMenu.Name} ---",true);
             PrintsUserList();
 
@@ -143,6 +144,7 @@ namespace ApplicationNo1
             InsertWriteLine("Give the distance you want to drive.");
             var input = (double)GetUserInput(InputValidationTypes.Double);
 
+            //Chris - Drive should be a user method, which then calls the Vehicle Drive method
             var checkDrive = _iuser.Vehicle.Drive(input);
 
             if (checkDrive)
@@ -164,6 +166,8 @@ namespace ApplicationNo1
 
             if (walletCheck)
             {
+                //Chris - Refuel should be a user method, which then calls the Vehicle Refuel method
+                //Chris - GasPrice is already a property of User so no need to pass it as a param
                 var results = _iuser.Vehicle.Refuel(doubleInput, _iuser.Country.GasPrice);
 
                 switch (results)
@@ -437,6 +441,7 @@ namespace ApplicationNo1
         }
         public void CheckUsersAmount()
         {
+            //Chris - Go Back instead of _mainMenu expilicitly
             if (_usersList.Count == 0)
             {
                 InsertWriteLine("Zero users in the system.\n");
@@ -444,9 +449,7 @@ namespace ApplicationNo1
                 MenuOptions();
             }
         }
-
-      
-        
+   
          #endregion
 
         #region Utilities
@@ -456,6 +459,8 @@ namespace ApplicationNo1
             var test = insertInputDefaults ? " [MAIN MENU -> Type MAIN MENU] [PREVIOUS MENU -> Type GO BACK]\n" : "";
             Console.WriteLine(originalWriteLine + test); 
         }
+
+        //Chris - This Method should trigger the corresponding MenuItem action automatically, instead of manually calling MenuOptions() after calling MenuGoBackOneStep()
         private void MenuGoBackOneStep()
         {
             var parent = GetMenuItemParentByChildId(_mainMenu, _currentMenu.Id);

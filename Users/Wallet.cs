@@ -44,6 +44,7 @@
         }
         public bool ChecksMoneyAvailable(double cash)
         {
+            //Chris - This can be a single line
             if (SurpassesWalletLimit(cash))
                 return false;
             else
