@@ -58,14 +58,13 @@ namespace ApplicationNo1
 
             //Update current menu
             _currentMenu = choice;
+            InsertWriteLine($"--- {_currentMenu.Name} ---", true);
             choice.UserSelectionAction();
         }
 
         //USER COMMANDS
         public void CreateNewUser()
         {
-            InsertWriteLine($"--- {_currentMenu.Name} ---",true);
-
             //Name Input
             InsertWriteLine("Give name: ");
             var name = (string)GetUserInput(InputValidationTypes.None);
@@ -109,43 +108,46 @@ namespace ApplicationNo1
         }
         public void SelectUser()
         {
-            CheckUsersAmount();
-
-            //Chris - This could be called automatically from MenuOptions (whenever a menu change happens)
-            InsertWriteLine($"--- {_currentMenu.Name} ---",true);
-            PrintsUserList();
-
-            InsertWriteLine("To choose write the corresponding username.");
-
-            var input = (string)GetUserInput(InputValidationTypes.None);
-
-            var userSelected = _usersList.FirstOrDefault(x => x.Name == input);
-
-            if (userSelected != null)
+            if (CheckUsersAmount())
             {
-                InsertWriteLine($"You selected user {userSelected.Name}");
+                PrintsUserList();
+
+                InsertWriteLine("To choose write the corresponding username.");
+
+                var input = (string)GetUserInput(InputValidationTypes.None);
+
+                var userSelected = _usersList.FirstOrDefault(x => x.Name == input);
+
+                if (userSelected != null)
+                {
+                    InsertWriteLine($"You selected user {userSelected.Name}");
+                }
+                else
+                {
+                    InsertWriteLine("Please write the username of your choice.\n");
+                    SelectUser();
+                }
+
+                //Update chosen user
+                _iuser = userSelected;
+
+                //SUBMENU
+                MenuOptions();
             }
             else
             {
-                InsertWriteLine("Please write the username of your choice.\n");
-                SelectUser();
+                MenuGoBackOneStep();
+                MenuOptions();
             }
-
-            //Update chosen user
-            _iuser = userSelected;
-
-            //SUBMENU
-            MenuOptions();
         }
         
         //SELECT USER SUBMENU
-        public void UserDrive()
+        public void ExecuteDrive()
         {
             InsertWriteLine("Give the distance you want to drive.");
             var input = (double)GetUserInput(InputValidationTypes.Double);
 
-            //Chris - Drive should be a user method, which then calls the Vehicle Drive method
-            var checkDrive = _iuser.Vehicle.Drive(input);
+            var checkDrive = _iuser.UserDrive(input);
 
             if (checkDrive)
                 InsertWriteLine($"You drove {input} km.");
@@ -156,7 +158,7 @@ namespace ApplicationNo1
             MenuGoBackOneStep();
             MenuOptions();
         }
-        public void UserVehicleRefuel()
+        public void ExecuteRefuel()
         {
             InsertWriteLine($"Give cash to refuel. You have {_iuser.Wallet.Balance:0.##} {_iuser.Country.Currency}.", true);
             var doubleInput = (double)GetUserInput(InputValidationTypes.Double);
@@ -166,9 +168,9 @@ namespace ApplicationNo1
 
             if (walletCheck)
             {
-                //Chris - Refuel should be a user method, which then calls the Vehicle Refuel method
+                
                 //Chris - GasPrice is already a property of User so no need to pass it as a param
-                var results = _iuser.Vehicle.Refuel(doubleInput, _iuser.Country.GasPrice);
+                var results = _iuser.UserRefuel(doubleInput);
 
                 switch (results)
                 {
@@ -211,11 +213,20 @@ namespace ApplicationNo1
         }
         public void SelectNewUser()
         {
-            //Back to options of Select User
-            MenuGoBackOneStep();
-            SelectUser();
+            if (CheckUsersAmount())
+            {
+                //Back to options of Select User
+                MenuGoBackOneStep();
+                SelectUser();
+            }
+            else
+            {
+                MenuGoBackOneStep();
+                MenuOptions();
+            }
+
         }
-        //END
+        //END OF SUBMENU
 
         public void ShowUsers()
         {
@@ -247,15 +258,14 @@ namespace ApplicationNo1
                     Id = Guid.NewGuid().ToString(),
                     Name = "Drive",
                     UserSelection = 1,
-                    UserSelectionAction = UserDrive  //--> _iuser.Travel χωρις vehicle να την καλεί
-                    //UserSelectionAction = UserTravel() ------->  _user.Travel(Km, Country Landed)
+                    UserSelectionAction = ExecuteDrive 
                 },
                 new MenuItem()
                 {
                     Id = Guid.NewGuid().ToString(),
                     Name = "Refuel",
                     UserSelection = 2,
-                    UserSelectionAction  = UserVehicleRefuel
+                    UserSelectionAction  = ExecuteRefuel
                 },
                 new MenuItem()
                 {
@@ -439,15 +449,14 @@ namespace ApplicationNo1
 
             return input;
         }
-        public void CheckUsersAmount()
+        public bool CheckUsersAmount()
         {
-            //Chris - Go Back instead of _mainMenu expilicitly
             if (_usersList.Count == 0)
             {
                 InsertWriteLine("Zero users in the system.\n");
-                _currentMenu = _mainMenu;
-                MenuOptions();
+                return false;
             }
+            return true;
         }
    
          #endregion
@@ -460,11 +469,12 @@ namespace ApplicationNo1
             Console.WriteLine(originalWriteLine + test); 
         }
 
-        //Chris - This Method should trigger the corresponding MenuItem action automatically, instead of manually calling MenuOptions() after calling MenuGoBackOneStep()
+   
         private void MenuGoBackOneStep()
         {
             var parent = GetMenuItemParentByChildId(_mainMenu, _currentMenu.Id);
             _currentMenu = parent;
+            MenuOptions();
         }
         private MenuItem GetMenuItemParentByChildId(MenuItem menuItemToSearch, string id)
         {

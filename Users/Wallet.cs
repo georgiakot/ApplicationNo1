@@ -1,4 +1,6 @@
-﻿namespace ApplicationNo1.Users
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace ApplicationNo1.Users
 {
     public class Wallet
     {
@@ -44,11 +46,7 @@
         }
         public bool ChecksMoneyAvailable(double cash)
         {
-            //Chris - This can be a single line
-            if (SurpassesWalletLimit(cash))
-                return false;
-            else
-                return true;
+            return !SurpassesWalletLimit(cash);
         }
 
         private bool SurpassesWalletLimit(double cash)

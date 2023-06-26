@@ -1,4 +1,5 @@
 ﻿using ApplicationNo1.Users.Vehicles;
+using static ApplicationNo1.Users.Vehicles.VehicleBase;
 
 namespace ApplicationNo1.Users
 {
@@ -20,25 +21,26 @@ namespace ApplicationNo1.Users
         #endregion
 
         #region Properties
-        /*
-
-        public double Balance { get { return _wallet.Balance; } set { _wallet.Balance = value; } }
-
-        public string? Currency { get { return _country.Currency; } set { _country.Currency = value; } }
-
-        public  double KmCounter { get { return _vehicle.KmCounter; } set { _vehicle.KmCounter = value; } }
-
-        public string? CountryName { get { return _country.Name; } set { _country.Name = value; } }
-
-        */
-      
-
         public string? Name { get; set; }
         public int Age { get; set; }
         public Wallet Wallet { get { return _wallet; } set { _wallet = value; } }
         public IVehicle? Vehicle { get { return _vehicle; } set { _vehicle = value; } }
         public Country Country { get { return _country; } set { _country = value; } }
         public DateTime CreationTime { get; set; }
+        #endregion
+
+        #region Methods
+        public bool UserDrive(double distance)
+        {
+            return Vehicle.Drive(distance);
+        }
+
+        public RefuelResults UserRefuel(double money)
+        {
+
+           return Vehicle.Refuel(money, Country.GasPrice);
+
+        }
         #endregion
 
     }
