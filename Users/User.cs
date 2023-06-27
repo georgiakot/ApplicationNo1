@@ -8,40 +8,53 @@ namespace ApplicationNo1.Users
         #region Fields
         private Wallet? _wallet;
         private IVehicle? _vehicle;
-        private Country _country;
+        private Country? _currentCountry;
+        private ITrip? _trip;
         #endregion
 
         #region Constructor
-        public User()
+        public User(Country startingCountry)
         {
+            StartingCountry = startingCountry;
             _vehicle = null;
+            _trip = null;
             _wallet = new Wallet();
-            _country = new Country();
+            _currentCountry = new Country();
         }
         #endregion
 
         #region Properties
+        public string? Id { get; set; }
         public string? Name { get; set; }
         public int Age { get; set; }
         public Wallet Wallet { get { return _wallet; } set { _wallet = value; } }
         public IVehicle? Vehicle { get { return _vehicle; } set { _vehicle = value; } }
-        public Country Country { get { return _country; } set { _country = value; } }
+        public Country StartingCountry { get; }
+        public Country CurrentCountry { get { return _currentCountry; } set { _currentCountry = value; } }
+        public ITrip? Trip { get { return _trip; } set { _trip = value; } }
         public DateTime CreationTime { get; set; }
         #endregion
 
         #region Methods
-        public bool UserDrive(double distance)
+        public bool Drive(double distance)
         {
             return Vehicle.Drive(distance);
         }
 
-        public RefuelResults UserRefuel(double money)
+        public RefuelResults Refuel(double money)
         {
-
-           return Vehicle.Refuel(money, Country.GasPrice);
-
+           return Vehicle.Refuel(money, CurrentCountry.GasPrice);
         }
         #endregion
+        public void NewTrip(Country country, double distance)
+        {
+            ITrip trip = new Trip()
+            {
+                CountryLanded = country,
+                DistanceTraveled = distance
+            };
 
+            _trip.AddStepToList(trip);
+        }
     }
 }

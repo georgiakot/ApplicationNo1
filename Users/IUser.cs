@@ -7,18 +7,21 @@ namespace ApplicationNo1.Users
     {
        
         #region Properties
+        string? Id { get; set; }
         string? Name { get; set; }
         int Age { get; set; }
         Wallet Wallet { get; set; }
         IVehicle Vehicle { get; set; }
-        Country Country { get; set; }
+        ITrip? Trip { get; set; }
+        Country StartingCountry { get; }
+        Country CurrentCountry { get; set; }
         DateTime CreationTime { get; set; }
         #endregion
 
         #region Methods
-        bool UserDrive(double distance);
-
-        RefuelResults UserRefuel(double money);
+        bool Drive(double distance);
+        RefuelResults Refuel(double money);
+        void NewTrip(Country country, double distance);
         #endregion
 
     }

@@ -1,5 +1,6 @@
 ﻿using ApplicationNo1.Users;
 using ApplicationNo1.Users.Vehicles;
+using System.Linq.Expressions;
 
 namespace ApplicationNo1
 {
@@ -8,17 +9,17 @@ namespace ApplicationNo1
         #region Fields
 
         private List<IUser> _usersList;
+        private List<ITrip> _stepsList;
         private IUser? _iuser;
         private MenuItem? _currentMenu;
         private MenuItem?  _mainMenu;
-
         #endregion
-
+       
         #region Constructor
         public Menu()
         {
             _usersList = new List<IUser>();
-            IUser _iuser = new User();
+            _stepsList = new List<ITrip>();
         }
         #endregion
 
@@ -65,6 +66,9 @@ namespace ApplicationNo1
         //USER COMMANDS
         public void CreateNewUser()
         {
+            //Set Id
+            var id = Guid.NewGuid().ToString();
+
             //Name Input
             InsertWriteLine("Give name: ");
             var name = (string)GetUserInput(InputValidationTypes.None);
@@ -73,7 +77,7 @@ namespace ApplicationNo1
             InsertWriteLine("Give age: ");
             var age = (int)GetUserInput(InputValidationTypes.Int);
 
-            //Country Input
+            //Starting Country 
             var country = CountrySelection();
 
             //Vehicle Input
@@ -82,24 +86,34 @@ namespace ApplicationNo1
             //Wallet Balance Input
             var wallet = BalanceSelection();
 
+            //First Trip
+            var trip = StepCreation(country,0);
+
             //User's Creation Time
             var creationTime = DateTime.UtcNow;
 
             //User Creation
-            var user = new User
+            var user = new User(country)
             {
+                Id = id,
                 Name = name,
                 Age = age,
-                Country = country,
+                CurrentCountry = country,
                 Vehicle = vehicle,
                 Wallet = wallet,
+                Trip = trip,
                 CreationTime = creationTime,
             };
 
-            //Adds user to list
-            _usersList.Add(user);
+            _iuser = user;
+            //Adds user to user list
+            _usersList.Add(_iuser);
+
 
             InsertWriteLine("User creation was succesfull.");
+
+            //Adds user first trip to list
+            _iuser.NewTrip(_iuser.CurrentCountry, 0);
 
             //BACK TO MENU - update current menu
             MenuGoBackOneStep();
@@ -139,6 +153,7 @@ namespace ApplicationNo1
                 MenuGoBackOneStep();
                 MenuOptions();
             }
+             
         }
         
         //SELECT USER SUBMENU
@@ -147,10 +162,23 @@ namespace ApplicationNo1
             InsertWriteLine("Give the distance you want to drive.");
             var input = (double)GetUserInput(InputValidationTypes.Double);
 
-            var checkDrive = _iuser.UserDrive(input);
+            var checkDrive = _iuser.Drive(input);
 
             if (checkDrive)
-                InsertWriteLine($"You drove {input} km.");
+            {
+                InsertWriteLine("What is your final destination? Choose: ");
+                _iuser.CurrentCountry = CountrySelection();
+                InsertWriteLine($"You drove {input} km. You now are in: {_iuser.CurrentCountry.Name}.");
+
+                //Add to list
+                _iuser.NewTrip(_iuser.CurrentCountry, input);
+
+                //Increase total distance
+                _iuser.Trip.TotalDistance += input;
+                InsertWriteLine($"Total Distance driven -> {_iuser.Trip.TotalDistance:0.##}. Starting point -> {_iuser.StartingCountry.Name}");
+
+                PrintStepsList();
+            }
             else
                 InsertWriteLine("There is not enough fuel to drive this distance.");
 
@@ -160,7 +188,7 @@ namespace ApplicationNo1
         }
         public void ExecuteRefuel()
         {
-            InsertWriteLine($"Give cash to refuel. You have {_iuser.Wallet.Balance:0.##} {_iuser.Country.Currency}.", true);
+            InsertWriteLine($"Give cash to refuel. You have {_iuser.Wallet.Balance:0.##} {_iuser.CurrentCountry.Currency}.", true);
             var doubleInput = (double)GetUserInput(InputValidationTypes.Double);
 
             //Checks for money inside wallet
@@ -170,7 +198,7 @@ namespace ApplicationNo1
             {
                 
                 //Chris - GasPrice is already a property of User so no need to pass it as a param
-                var results = _iuser.UserRefuel(doubleInput);
+                var results = _iuser.Refuel(doubleInput);
 
                 switch (results)
                 {
@@ -179,17 +207,17 @@ namespace ApplicationNo1
                         _iuser.Wallet.Payment(doubleInput);
 
 
-                        InsertWriteLine($"Payment was succesfull. You now have: {_iuser.Wallet.Balance:0.##} {_iuser.Country.Currency}.");
+                        InsertWriteLine($"Payment was succesfull. You now have: {_iuser.Wallet.Balance:0.##} {_iuser.CurrentCountry.Currency}.");
                         InsertWriteLine($"You filled your {_iuser.Vehicle.Name} with {_iuser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_iuser.Vehicle.FuelLevel:0.##} L.");
                         break;
                     case VehicleBase.RefuelResults.TooMuchMoneyNeedsChange:
                         //Payment
-                        var moneyRequired = _iuser.Vehicle.RefuelAmount * _iuser.Country.GasPrice;
+                        var moneyRequired = _iuser.Vehicle.RefuelAmount * _iuser.CurrentCountry.GasPrice;
                         _iuser.Wallet.Payment(moneyRequired);
                         var change = doubleInput - moneyRequired;
 
 
-                        InsertWriteLine($"You paid {moneyRequired:0.##} and your change is {change:0.##} {_iuser.Country.Currency}. You now have: {_iuser.Wallet.Balance:0.##} {_iuser.Country.Currency}.");
+                        InsertWriteLine($"You paid {moneyRequired:0.##} and your change is {change:0.##} {_iuser.CurrentCountry.Currency}. You now have: {_iuser.Wallet.Balance:0.##} {_iuser.CurrentCountry.Currency}.");
                         InsertWriteLine($"You filled your {_iuser.Vehicle.Name} with {_iuser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_iuser.Vehicle.FuelLevel:0.##} L.");
                         break;
                 }
@@ -204,8 +232,8 @@ namespace ApplicationNo1
         }
         public void UserInfo()
         {
-            InsertWriteLine($"User :{_iuser.Name}, has {_iuser.Wallet.Balance} {_iuser.Country.Currency}" +
-                $" and drove {_iuser.Vehicle.KmCounter} km in {_iuser.Country.Name}.");
+            InsertWriteLine($"User :{_iuser.Name} with ID {_iuser.Id} has {_iuser.Wallet.Balance} {_iuser.CurrentCountry.Currency}" +
+                $" and drove {_iuser.Vehicle.KmCounter} km in {_iuser.CurrentCountry.Name}.");
 
             //Back to options of Select User
             MenuGoBackOneStep();
@@ -217,13 +245,11 @@ namespace ApplicationNo1
             {
                 //Back to options of Select User
                 MenuGoBackOneStep();
+                MenuGoBackOneStep();
                 SelectUser();
             }
             else
-            {
                 MenuGoBackOneStep();
-                MenuOptions();
-            }
 
         }
         //END OF SUBMENU
@@ -371,7 +397,7 @@ namespace ApplicationNo1
                 new Country() { Name = "Norway"  , Currency = "NOK" , GasPrice = 23.13, SearchTerm = "N" }
             };
 
-            InsertWriteLine("Select user's current location:");
+            InsertWriteLine("Select country:");
             foreach (var countryElement in countriesList)
             {
                 var index = countriesList.IndexOf(countryElement) + 1;
@@ -383,7 +409,7 @@ namespace ApplicationNo1
 
             if (country != null)
             {
-                InsertWriteLine($"Current user's location -> {country.Name}.\n");
+                InsertWriteLine($"Current user's country -> {country.Name}.\n");
             }
             else
             {
@@ -402,6 +428,18 @@ namespace ApplicationNo1
 
             return money;
         }
+
+        private ITrip StepCreation(Country country, double distance)
+        {
+            ITrip step = new Trip()
+            {
+                CountryLanded = country,
+                DistanceTraveled = distance,
+            };
+
+            return step;
+        }
+             
         #endregion
 
         #region Input & Validations
@@ -468,13 +506,10 @@ namespace ApplicationNo1
             var test = insertInputDefaults ? " [MAIN MENU -> Type MAIN MENU] [PREVIOUS MENU -> Type GO BACK]\n" : "";
             Console.WriteLine(originalWriteLine + test); 
         }
-
-   
         private void MenuGoBackOneStep()
         {
             var parent = GetMenuItemParentByChildId(_mainMenu, _currentMenu.Id);
             _currentMenu = parent;
-            MenuOptions();
         }
         private MenuItem GetMenuItemParentByChildId(MenuItem menuItemToSearch, string id)
         {
@@ -503,8 +538,18 @@ namespace ApplicationNo1
             foreach (var user in _usersList)
             {
                 var index = _usersList.IndexOf(user) + 1;
-                InsertWriteLine($"{index}) Name:{user.Name}, Age:{user.Age}, Starting destination: {user.Country.Name}, " +
-                    $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.Country.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
+                InsertWriteLine($"{index}) Name:{user.Name},ID {user.Id}, Age:{user.Age}, Starting destination: {user.CurrentCountry.Name}, " +
+                    $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
+            }
+        }
+
+        private void PrintStepsList()
+        {
+            InsertWriteLine("---TRIP STEPS---");
+            foreach (var step in _iuser.Trip.Steps)
+            {
+                var index = _iuser.Trip.Steps.IndexOf(step);
+                InsertWriteLine($"{index}) Distance traveled -> {step.DistanceTraveled} km. Final destination -> {step.CountryLanded.Name}.");
             }
         }
         #endregion
