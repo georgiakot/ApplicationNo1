@@ -36,9 +36,16 @@ namespace ApplicationNo1.Users
         #endregion
 
         #region Methods
-        public bool Drive(double distance)
+        public bool Drive(double distance, Country countryDestination)
         {
-            return Vehicle.Drive(distance);
+            var result = Vehicle.Drive(distance);
+
+            if (result)
+            {
+                //Update Trip
+            }
+
+            return result;
         }
 
         public RefuelResults Refuel(double money)

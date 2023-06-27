@@ -19,7 +19,7 @@ namespace ApplicationNo1.Users
         #endregion
 
         #region Methods
-        bool Drive(double distance);
+        bool Drive(double distance, Country countryDestination);
         RefuelResults Refuel(double money);
         void NewTrip(Country country, double distance);
         #endregion

@@ -1,4 +1,5 @@
-﻿using ApplicationNo1.Users.Vehicles;
+﻿using ApplicationNo1.Trip;
+using ApplicationNo1.Users.Vehicles;
 
 namespace ApplicationNo1.Users
 {
@@ -7,14 +8,14 @@ namespace ApplicationNo1.Users
         #region Properties
         string? UserID { get; }
         IVehicle? UserVehicle { get; set; }
-        List<ITrip> Steps { get; set; }
+        List<TripStep> Steps { get; set; }
         double TotalDistance { get; set; }
         double DistanceTraveled { get; set; }
         Country? CountryLanded { get; set; }
         #endregion
 
         #region Methods
-        void AddStepToList(ITrip step);
+        void AddNewStep(TripStep tripStep);
         #endregion
 
     }

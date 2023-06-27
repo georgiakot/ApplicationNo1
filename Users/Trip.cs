@@ -1,4 +1,5 @@
-﻿using ApplicationNo1.Users.Vehicles;
+﻿using ApplicationNo1.Trip;
+using ApplicationNo1.Users.Vehicles;
 
 namespace ApplicationNo1.Users
 {
@@ -7,33 +8,46 @@ namespace ApplicationNo1.Users
         #region Fields
         private double _totalDistance;
         private double _distanceTraveled;
-        private List<ITrip> _steps;
+        private List<TripStep> _steps;
         #endregion
 
         #region Constructor
         public Trip()
         {
-            _steps = new List<ITrip>();
+            _steps = new List<TripStep>();
             _totalDistance = 0;
             _distanceTraveled = 0;
         }
         #endregion
 
         #region Properties
+
+
         public string? UserID { get; }
         public IVehicle? UserVehicle { get; set; }
-        public List<ITrip> Steps { get { return _steps; } set { _steps = value; } }
-        public double TotalDistance { get { return _totalDistance; } set { _totalDistance = value; } }
 
-        public double DistanceTraveled { get { return _distanceTraveled; } set { _distanceTraveled = value; } } 
-        public Country? CountryLanded { get; set; }
+        public List<TripStep> Steps { get { return _steps; } }
+
+        public double TotalDistance
+        {
+            get
+            {
+                double sum = 0;
+                foreach (var step in Steps)
+                {
+                    sum += step.DistanceTraveled;
+                }
+
+                return sum;
+            }
+        }
 
         #endregion
 
         #region Methods
-        public void AddStepToList(ITrip step)
+        public void AddNewStep(TripStep tripStep)
         {
-            _steps.Add(step);
+            _steps.Add(tripStep);
         }
         #endregion
 

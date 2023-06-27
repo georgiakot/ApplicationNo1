@@ -93,7 +93,8 @@ namespace ApplicationNo1
             //User's Creation Time
             var creationTime = DateTime.UtcNow;
 
-            _currentIuser = new User(country)
+            //Adds user to user list
+            _usersList.Add(new User(country)
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
@@ -102,10 +103,7 @@ namespace ApplicationNo1
                 Vehicle = vehicle,
                 Wallet = wallet,
                 CreationTime = creationTime,
-            };
-
-            //Adds user to user list
-            _usersList.Add(_currentIuser);
+            });
 
             InsertWriteLine("User creation was succesfull.");
 
@@ -153,17 +151,18 @@ namespace ApplicationNo1
             InsertWriteLine("Give the distance you want to drive.");
             var input = (double)GetUserInput(InputValidationTypes.Double);
 
-            var checkDrive = _currentIuser.Drive(input);
+            InsertWriteLine("What is your final destination? Choose: ");
+            var country = CountrySelection();
+
+            var checkDrive = _currentIuser.Drive(input, country);
 
             if (checkDrive)
             {
                 
-                InsertWriteLine("What is your final destination? Choose: ");
-                _currentIuser.CurrentCountry = CountrySelection();
+
                 InsertWriteLine($"You drove {input} km. You now are in: {_currentIuser.CurrentCountry.Name}.");
 
                 //Add to list
-                _currentIuser.NewTrip(_currentIuser.CurrentCountry, input);
                 _currentIuser.Trip.TotalDistance += input;
 
                 InsertWriteLine($"Total Distance driven -> {_currentIuser.Trip.TotalDistance:0.##}. Starting point -> {_currentIuser.StartingCountry.Name}");
