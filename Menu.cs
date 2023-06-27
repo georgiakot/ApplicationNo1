@@ -9,7 +9,6 @@ namespace ApplicationNo1
         #region Fields
 
         private List<IUser> _usersList;
-        private List<ITrip> _stepsList;
         private IUser? _iuser;
         private MenuItem? _currentMenu;
         private MenuItem?  _mainMenu;
@@ -19,7 +18,6 @@ namespace ApplicationNo1
         public Menu()
         {
             _usersList = new List<IUser>();
-            _stepsList = new List<ITrip>();
         }
         #endregion
 
