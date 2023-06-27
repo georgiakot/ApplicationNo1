@@ -17,7 +17,7 @@ namespace ApplicationNo1.Users
         {
             StartingCountry = startingCountry;
             _vehicle = null;
-            _trip = null;
+            _trip = new Trip();
             _wallet = new Wallet();
             _currentCountry = new Country();
         }

@@ -6,6 +6,7 @@ namespace ApplicationNo1.Users
     {
         #region Fields
         private double _totalDistance;
+        private double _distanceTraveled;
         private List<ITrip> _steps;
         #endregion
 
@@ -14,6 +15,7 @@ namespace ApplicationNo1.Users
         {
             _steps = new List<ITrip>();
             _totalDistance = 0;
+            _distanceTraveled = 0;
         }
         #endregion
 
@@ -23,7 +25,7 @@ namespace ApplicationNo1.Users
         public List<ITrip> Steps { get { return _steps; } set { _steps = value; } }
         public double TotalDistance { get { return _totalDistance; } set { _totalDistance = value; } }
 
-        public double DistanceTraveled { get; set; } 
+        public double DistanceTraveled { get { return _distanceTraveled; } set { _distanceTraveled = value; } } 
         public Country? CountryLanded { get; set; }
 
         #endregion
