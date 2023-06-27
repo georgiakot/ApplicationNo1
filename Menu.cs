@@ -9,7 +9,6 @@ namespace ApplicationNo1
         #region Fields
 
         private List<IUser> _usersList;
-        private List<ITrip> _stepsList;
         private IUser? _iuser;
         private MenuItem? _currentMenu;
         private MenuItem?  _mainMenu;
@@ -19,7 +18,6 @@ namespace ApplicationNo1
         public Menu()
         {
             _usersList = new List<IUser>();
-            _stepsList = new List<ITrip>();
         }
         #endregion
 
@@ -151,7 +149,6 @@ namespace ApplicationNo1
             else
             {
                 MenuGoBackOneStep();
-                MenuOptions();
             }
              
         }
@@ -241,15 +238,7 @@ namespace ApplicationNo1
         }
         public void SelectNewUser()
         {
-            if (CheckUsersAmount())
-            {
-                //Back to options of Select User
-                MenuGoBackOneStep();
-                MenuGoBackOneStep();
-                SelectUser();
-            }
-            else
-                MenuGoBackOneStep();
+            _currentMenu.UserSelectionAction();
 
         }
         //END OF SUBMENU
@@ -305,7 +294,7 @@ namespace ApplicationNo1
                     Id = Guid.NewGuid().ToString(),
                     Name = "Select New User",
                     UserSelection = 4,
-                    UserSelectionAction = SelectNewUser
+                    UserSelectionAction = _currentMenu.UserSelectionAction
                 }
             };
 
@@ -510,6 +499,7 @@ namespace ApplicationNo1
         {
             var parent = GetMenuItemParentByChildId(_mainMenu, _currentMenu.Id);
             _currentMenu = parent;
+            _currentMenu.UserSelectionAction();
         }
         private MenuItem GetMenuItemParentByChildId(MenuItem menuItemToSearch, string id)
         {
