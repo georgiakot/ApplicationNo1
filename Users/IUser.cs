@@ -1,4 +1,5 @@
-﻿using ApplicationNo1.Users.Vehicles;
+﻿using ApplicationNo1.Trip;
+using ApplicationNo1.Users.Vehicles;
 using static ApplicationNo1.Users.Vehicles.VehicleBase;
 
 namespace ApplicationNo1.Users
@@ -11,7 +12,7 @@ namespace ApplicationNo1.Users
         string? Name { get; set; }
         int Age { get; set; }
         Wallet Wallet { get; set; }
-        IVehicle Vehicle { get; set; }
+        IVehicle IVehicle { get; set; }
         ITrip? Trip { get; set; }
         Country StartingCountry { get; }
         Country CurrentCountry { get; set; }
@@ -21,7 +22,7 @@ namespace ApplicationNo1.Users
         #region Methods
         bool Drive(double distance, Country countryDestination);
         RefuelResults Refuel(double money);
-        void NewTrip(Country country, double distance);
+     //   void NewTrip(Country country, double distance);
         #endregion
 
     }

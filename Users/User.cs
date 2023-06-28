@@ -1,4 +1,5 @@
-﻿using ApplicationNo1.Users.Vehicles;
+﻿using ApplicationNo1.Trip;
+using ApplicationNo1.Users.Vehicles;
 using static ApplicationNo1.Users.Vehicles.VehicleBase;
 
 namespace ApplicationNo1.Users
@@ -12,6 +13,18 @@ namespace ApplicationNo1.Users
         private ITrip? _trip;
         #endregion
 
+        #region Properties
+        public string? Id { get; set; }
+        public string? Name { get; set; }
+        public int Age { get; set; }
+        public Wallet Wallet { get { return _wallet; } set { _wallet = value; } }
+        public IVehicle? IVehicle { get { return _vehicle; } set { _vehicle = value; } }
+        public Country StartingCountry { get; }
+        public Country CurrentCountry { get { return _currentCountry; } set { _currentCountry = value; } }
+        public ITrip? Trip { get { return _trip; } set { _trip = value; } }
+        public DateTime CreationTime { get; set; }
+        #endregion
+
         #region Constructor
         public User(Country startingCountry)
         {
@@ -23,22 +36,10 @@ namespace ApplicationNo1.Users
         }
         #endregion
 
-        #region Properties
-        public string? Id { get; set; }
-        public string? Name { get; set; }
-        public int Age { get; set; }
-        public Wallet Wallet { get { return _wallet; } set { _wallet = value; } }
-        public IVehicle? Vehicle { get { return _vehicle; } set { _vehicle = value; } }
-        public Country StartingCountry { get; }
-        public Country CurrentCountry { get { return _currentCountry; } set { _currentCountry = value; } }
-        public ITrip? Trip { get { return _trip; } set { _trip = value; } }
-        public DateTime CreationTime { get; set; }
-        #endregion
-
         #region Methods
         public bool Drive(double distance, Country countryDestination)
         {
-            var result = Vehicle.Drive(distance);
+            var result = IVehicle.Drive(distance);
 
             if (result)
             {
@@ -50,18 +51,9 @@ namespace ApplicationNo1.Users
 
         public RefuelResults Refuel(double money)
         {
-           return Vehicle.Refuel(money, CurrentCountry.GasPrice);
+           return IVehicle.Refuel(money, CurrentCountry.GasPrice);
         }
         #endregion
-        public void NewTrip(Country country, double distance)
-        {
-            ITrip trip = new Trip()
-            {
-                CountryLanded = country,
-                DistanceTraveled = distance
-            };
-
-            _trip.AddStepToList(trip);
-        }
+        
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace ApplicationNo1.Users
+﻿namespace ApplicationNo1.Users
 {
     public class Wallet
     {
