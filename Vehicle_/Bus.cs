@@ -1,4 +1,4 @@
-﻿namespace ApplicationNo1.Users.Vehicles
+﻿namespace ApplicationNo1.Vehicle_
 {
     public class Bus : VehicleBase
     {

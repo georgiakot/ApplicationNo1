@@ -1,6 +1,6 @@
-﻿using ApplicationNo1.Users;
+﻿using ApplicationNo1.Country_;
 
-namespace ApplicationNo1.Trips
+namespace ApplicationNo1.Trip_
 {
     public class TripStep
     {

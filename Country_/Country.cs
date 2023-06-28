@@ -1,4 +1,4 @@
-﻿namespace ApplicationNo1.Users
+﻿namespace ApplicationNo1.Country_
 {
     public class Country
     {

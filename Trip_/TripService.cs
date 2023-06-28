@@ -1,22 +1,17 @@
-﻿using ApplicationNo1.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ApplicationNo1.Country_;
+using ApplicationNo1.User_;
 
-namespace ApplicationNo1.Trips
+namespace ApplicationNo1.Trip_
 {
     public sealed class TripService
     {
+        private static TripService? _instance;
+        private List<ITrip> _trips;
+
         private TripService() 
         {
-            _trips = new List<Trip>();
+            _trips = new List<ITrip>();
         }
-
-        private static TripService _instance = null;
-
-        private List<Trip> _trips;
 
         public static TripService Instance
         {
@@ -30,9 +25,9 @@ namespace ApplicationNo1.Trips
             }
         }
 
-        public List<Trip> Trips { get { return _trips; } }
+        public List<ITrip> Trips { get { return _trips; } }
 
-        public void AddNewTrip(Trip trip)
+        public void AddNewTrip(ITrip trip)
         {
             _trips.Add(trip);
         }
@@ -68,10 +63,7 @@ namespace ApplicationNo1.Trips
                         }
                     }
                 });
-
-
             }
         }
     }
-
 }

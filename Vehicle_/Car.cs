@@ -1,14 +1,12 @@
-﻿using static ApplicationNo1.Users.Vehicles.VehicleBase;
-
-namespace ApplicationNo1.Users.Vehicles
+﻿namespace ApplicationNo1.Vehicle_
 {
-    public class Moto : VehicleBase
+    public class Car : VehicleBase
     {
         #region Constructor
-        public Moto()
+        public Car()
         {
-            _maxFuel = 10;
-            _factor = 0.05;
+            _maxFuel = 50;
+            _factor = 0.08;
         }
         #endregion
 
@@ -27,10 +25,9 @@ namespace ApplicationNo1.Users.Vehicles
                 _kmCounter += distance;
                 return true;
             }
-        
+
         }
 
         #endregion
-
     }
 }

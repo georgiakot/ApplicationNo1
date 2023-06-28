@@ -1,12 +1,14 @@
-﻿namespace ApplicationNo1.Users.Vehicles
+﻿using static ApplicationNo1.Vehicle_.VehicleBase;
+
+namespace ApplicationNo1.Vehicle_
 {
-    public class Car : VehicleBase
+    public class Moto : VehicleBase
     {
         #region Constructor
-        public Car()
+        public Moto()
         {
-            _maxFuel = 50;
-            _factor = 0.08;
+            _maxFuel = 10;
+            _factor = 0.05;
         }
         #endregion
 
@@ -29,5 +31,6 @@
         }
 
         #endregion
+
     }
 }

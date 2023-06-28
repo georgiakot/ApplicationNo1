@@ -1,6 +1,6 @@
-﻿namespace ApplicationNo1.Users.Vehicles
+﻿namespace ApplicationNo1.Vehicle_
 {
-    public class VehicleBase :IVehicle
+    public class VehicleBase : IVehicle
     {
 
         #region Fields
@@ -56,7 +56,7 @@
         {
             if (SurpassesDistanceLimit(distance))
             {
-                return false ;
+                return false;
             }
             else
             {

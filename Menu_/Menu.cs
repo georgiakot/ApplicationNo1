@@ -1,26 +1,24 @@
-﻿using ApplicationNo1.Users;
-using ApplicationNo1.Users.Vehicles;
+﻿using ApplicationNo1.Country_;
+using ApplicationNo1.Vehicle_;
+using ApplicationNo1.Wallet_;
+using ApplicationNo1.User_;
+using ApplicationNo1.Trip_;
+using System.Transactions;
 
-namespace ApplicationNo1
+namespace ApplicationNo1.Menu_
 {
     public class Menu
     {
         #region Fields
-
-        //Non Internal Use - needs to go ASAP NOW!!! GEORGIA GOOOOOOOOOOOOOOO
-        private List<IUser> _usersList;
-
-
-        //Internal Use
         private IUser? _icurrentUser;
         private MenuItem? _currentMenu;
-        private MenuItem?  _mainMenu;
+        private MenuItem? _mainMenu;
         #endregion
-       
+
         #region Constructor
         public Menu()
         {
-            _usersList = new List<IUser>();
+           
         }
         #endregion
 
@@ -96,7 +94,7 @@ namespace ApplicationNo1
             var creationTime = DateTime.UtcNow;
 
             //Adds user to user list
-            _usersList.Add(new User(country)
+            UserService.Instance.AddNewUser(new User(country)
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
@@ -124,7 +122,7 @@ namespace ApplicationNo1
 
                     var input = (string)GetUserInput(InputValidationTypes.None);
 
-                    var userSelected = _usersList.FirstOrDefault(x => x.Name == input);
+                    var userSelected = UserService.Instance.IUsersList.FirstOrDefault(x => x.Name == input);
 
                     if (userSelected != null)
                     {
@@ -139,8 +137,8 @@ namespace ApplicationNo1
                     //Update chosen user
                     _icurrentUser = userSelected;
                 }
-                    //SUBMENU
-                    MenuOptions();
+                //SUBMENU
+                MenuOptions();
             }
             else
                 MenuGoBackOneStep();
@@ -153,21 +151,14 @@ namespace ApplicationNo1
             var input = (double)GetUserInput(InputValidationTypes.Double);
 
             InsertWriteLine("What is your final destination? Choose: ");
-            var country = CountrySelection();
+            _icurrentUser.CurrentCountry = CountrySelection();
 
-            var checkDrive = _icurrentUser.Drive(input, country);
+            var checkDrive = _icurrentUser.Drive(input, _icurrentUser.CurrentCountry);
 
             if (checkDrive)
             {
-
-
-                InsertWriteLine($"You drove {input} km. You now are in: {_icurrentUser.CurrentCountry.Name}.");
-
-                //Add to list
-
-                InsertWriteLine($"Total Distance driven ->            . Starting point -> {_icurrentUser.StartingCountry.Name}");
-
-                //  PrintStepsList();
+                InsertWriteLine($"You drove {input} km from {_icurrentUser.StartingCountry.Name}.");
+                PrintTripStepList();
             }
             else
                 InsertWriteLine("There is not enough fuel to drive this distance.");
@@ -218,8 +209,8 @@ namespace ApplicationNo1
         }
         public void UserInfo()
         {
-            InsertWriteLine($"User :{_icurrentUser.Name} with ID {_icurrentUser.Id} has {_icurrentUser.Wallet.Balance} {_icurrentUser.CurrentCountry.Currency}" +
-                $" and drove {_icurrentUser.IVehicle.KmCounter} km in {_icurrentUser.CurrentCountry.Name}.");
+            InsertWriteLine($"User :{_icurrentUser.Name} with ID {_icurrentUser.Id} has {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}" +
+                $" and drove {_icurrentUser.IVehicle.KmCounter} km until {_icurrentUser.CurrentCountry.Name}.");
 
             //Back to options of Select User
             MenuGoBackOneStep();
@@ -233,11 +224,11 @@ namespace ApplicationNo1
         #endregion
         public void ShowUsers()
         {
-            if(CheckUsersAmount())
+            if (CheckUsersAmount())
             {
                 PrintsUserList();
             }
-            
+
             //BACK TO MENU - update current menu
             MenuGoBackOneStep();
         }
@@ -260,7 +251,7 @@ namespace ApplicationNo1
                     Id = Guid.NewGuid().ToString(),
                     Name = "Drive",
                     UserSelection = 1,
-                    UserSelectionAction = ExecuteDrive 
+                    UserSelectionAction = ExecuteDrive
                 },
                 new MenuItem()
                 {
@@ -319,7 +310,7 @@ namespace ApplicationNo1
                 }
             };
 
-            _mainMenu = new MenuItem() 
+            _mainMenu = new MenuItem()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = "Main Menu",
@@ -404,7 +395,7 @@ namespace ApplicationNo1
 
             return money;
         }
-             
+
         #endregion
 
         #region Input & Validations
@@ -454,22 +445,22 @@ namespace ApplicationNo1
         }
         public bool CheckUsersAmount()
         {
-            if (_usersList.Count == 0)
+            if (UserService.Instance.IUsersList.Count == 0)
             {
                 InsertWriteLine("Zero users in the system.\n");
                 return false;
             }
             return true;
         }
-   
-         #endregion
+
+        #endregion
 
         #region Utilities
 
         private void InsertWriteLine(string originalWriteLine, bool insertInputDefaults = false)
         {
             var test = insertInputDefaults ? " [MAIN MENU -> Type MAIN MENU] [PREVIOUS MENU -> Type GO BACK]\n" : "";
-            Console.WriteLine(originalWriteLine + test); 
+            Console.WriteLine(originalWriteLine + test);
         }
         private void MenuGoBackOneStep()
         {
@@ -509,11 +500,21 @@ namespace ApplicationNo1
         private void PrintsUserList()
         {
             InsertWriteLine("---USERS---");
-            foreach (var user in _usersList)
+            foreach (var user in UserService.Instance.IUsersList)
             {
-                var index = _usersList.IndexOf(user) + 1;
+                var index = UserService.Instance.IUsersList.IndexOf(user) + 1;
                 InsertWriteLine($"{index}) Name:{user.Name},ID {user.Id}, Age:{user.Age}, Starting destination: {user.StartingCountry.Name}, " +
                     $"Vehicle: {user.IVehicle.Name}, Money Balance: {user.Wallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
+            }
+        }
+
+        private void PrintTripStepList()
+        {
+            InsertWriteLine("---TRIP---");
+            foreach (var trip in TripService.Instance.Trips)
+            {
+                var index = TripService.Instance.Trips.IndexOf(trip) + 1;
+                InsertWriteLine($"{index}) UserID: {trip.UserID}, Total distance driven: {trip.TotalDistance} km, Vehicle: {trip.UserVehicle.Name}.");
             }
         }
         #endregion
@@ -528,4 +529,4 @@ namespace ApplicationNo1
         #endregion
     }
 }
-    
+

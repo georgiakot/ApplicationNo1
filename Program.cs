@@ -1,4 +1,4 @@
-﻿namespace ApplicationNo1
+﻿namespace ApplicationNo1.Menu_
 {
     public class Program
     {

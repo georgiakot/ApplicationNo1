@@ -1,13 +1,18 @@
-﻿using ApplicationNo1.Users.Vehicles;
+﻿using ApplicationNo1.Vehicle_;
 
-namespace ApplicationNo1.Trips
+namespace ApplicationNo1.Trip_
 {
     public class Trip : ITrip
     {
         #region Fields
-        private double _totalDistance;
-        private double _distanceTraveled;
         private List<TripStep> _steps;
+        #endregion
+
+        #region Constructor
+        public Trip()
+        {
+            _steps = new List<TripStep>();
+        }
         #endregion
 
         #region Properties
@@ -28,22 +33,5 @@ namespace ApplicationNo1.Trips
         }
 
         #endregion
-
-        #region Constructor
-        public Trip()
-        {
-            _steps = new List<TripStep>();
-            _totalDistance = 0;
-            _distanceTraveled = 0;
-        }
-        #endregion
-
-        #region Methods
-        public void AddNewStep(TripStep tripStep)
-        {
-            _steps.Add(tripStep);
-        }
-        #endregion
-
     }
 }
