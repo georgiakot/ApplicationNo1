@@ -7,7 +7,11 @@ namespace ApplicationNo1
     {
         #region Fields
 
+        //Non Internal Use - needs to go ASAP NOW!!! GEORGIA GOOOOOOOOOOOOOOO
         private List<IUser> _usersList;
+
+
+        //Internal Use
         private IUser? _icurrentUser;
         private MenuItem? _currentMenu;
         private MenuItem?  _mainMenu;

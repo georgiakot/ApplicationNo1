@@ -1,6 +1,6 @@
 ﻿using ApplicationNo1.Users.Vehicles;
 
-namespace ApplicationNo1.Trip
+namespace ApplicationNo1.Trips
 {
     public interface ITrip
     {

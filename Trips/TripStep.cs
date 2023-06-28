@@ -1,6 +1,6 @@
 ﻿using ApplicationNo1.Users;
 
-namespace ApplicationNo1.Trip
+namespace ApplicationNo1.Trips
 {
     public class TripStep
     {

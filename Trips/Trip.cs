@@ -1,6 +1,6 @@
 ﻿using ApplicationNo1.Users.Vehicles;
 
-namespace ApplicationNo1.Trip
+namespace ApplicationNo1.Trips
 {
     public class Trip : ITrip
     {
@@ -11,9 +11,9 @@ namespace ApplicationNo1.Trip
         #endregion
 
         #region Properties
-        public string? UserID { get; }
+        public string? UserID { get; set; }
         public IVehicle? UserVehicle { get; set; }
-        public List<TripStep> Steps { get { return _steps; } }
+        public List<TripStep> Steps { get { return _steps; } set { _steps = value;  } }
         public double TotalDistance
         {
             get

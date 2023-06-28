@@ -1,4 +1,4 @@
-﻿using ApplicationNo1.Trip;
+﻿using ApplicationNo1.Trips;
 using ApplicationNo1.Users.Vehicles;
 using static ApplicationNo1.Users.Vehicles.VehicleBase;
 
@@ -44,6 +44,7 @@ namespace ApplicationNo1.Users
             if (result)
             {
                 //Update Trip
+                TripService.Instance.AddNewTripStep(distance, countryDestination, this);
             }
 
             return result;
