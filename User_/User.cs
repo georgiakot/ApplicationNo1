@@ -12,6 +12,7 @@ namespace ApplicationNo1.User_
         private Wallet? _wallet;
         private IVehicle? _vehicle;
         private Country? _currentCountry;
+        private Country? _startingCountry;
         private ITrip? _trip;
         #endregion
 
@@ -21,8 +22,8 @@ namespace ApplicationNo1.User_
         public int Age { get; set; }
         public Wallet Wallet { get { return _wallet; } set { _wallet = value; } }
         public IVehicle? IVehicle { get { return _vehicle; } set { _vehicle = value; } }
-        public Country StartingCountry { get; }
-        public Country CurrentCountry { get { return _currentCountry; } set { _currentCountry = value; } }
+        public Country StartingCountry { get { return _startingCountry; } }
+        public Country CurrentCountry { get { return _currentCountry; } }
         public ITrip? Trip { get { return _trip; } set { _trip = value; } }
         public DateTime CreationTime { get; set; }
         #endregion
@@ -30,7 +31,8 @@ namespace ApplicationNo1.User_
         #region Constructor
         public User(Country startingCountry)
         {
-            StartingCountry = startingCountry;
+            _startingCountry = startingCountry;
+            _currentCountry = startingCountry;
             _vehicle = null;
             _trip = new Trip();
             _wallet = new Wallet();
@@ -47,6 +49,9 @@ namespace ApplicationNo1.User_
             {
                 //Update Trip
                 TripService.Instance.AddNewTripStep(distance, countryDestination, this);
+
+                //Update Current Country
+                _currentCountry = countryDestination;
             }
 
             return result;

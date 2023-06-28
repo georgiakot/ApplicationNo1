@@ -17,7 +17,7 @@ namespace ApplicationNo1.User_
         IVehicle IVehicle { get; set; }
         ITrip? Trip { get; set; }
         Country StartingCountry { get; }
-        Country CurrentCountry { get; set; }
+        Country CurrentCountry { get; }
         DateTime CreationTime { get; set; }
         #endregion
 

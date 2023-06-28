@@ -99,7 +99,6 @@ namespace ApplicationNo1.Menu_
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
                 Age = age,
-                CurrentCountry = country,
                 IVehicle = vehicle,
                 Wallet = wallet,
                 CreationTime = creationTime,
@@ -151,9 +150,8 @@ namespace ApplicationNo1.Menu_
             var input = (double)GetUserInput(InputValidationTypes.Double);
 
             InsertWriteLine("What is your final destination? Choose: ");
-            _icurrentUser.CurrentCountry = CountrySelection();
 
-            var checkDrive = _icurrentUser.Drive(input, _icurrentUser.CurrentCountry);
+            var checkDrive = _icurrentUser.Drive(input, CountrySelection());
 
             if (checkDrive)
             {
