@@ -234,7 +234,7 @@ namespace ApplicationNo1.Menu_
         [MenuItemActionAttribute("RandomTest")]
         public void RandomTest()
         {
-            Type type = typeof(Menu);
+            var type = typeof(Menu);
             MethodInfo[] methods = type.GetMethods();
 
             foreach (var method in methods)
