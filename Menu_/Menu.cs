@@ -3,6 +3,7 @@ using ApplicationNo1.Vehicle_;
 using ApplicationNo1.Wallet_;
 using ApplicationNo1.User_;
 using ApplicationNo1.Trip_;
+using System.Reflection;
 
 namespace ApplicationNo1.Menu_
 {
@@ -70,6 +71,8 @@ namespace ApplicationNo1.Menu_
 
             MenuOptions();
         }
+
+        [MenuItemActionAttribute("CreateNewUser")]
         public void CreateNewUser()
         {
             //Name Input
@@ -108,6 +111,8 @@ namespace ApplicationNo1.Menu_
             //BACK TO MENU - update current menu
             MenuGoBackOneStep();
         }
+
+        [MenuItemActionAttribute("SelectUser")]
         public void SelectUser()
         {
             if (CheckUsersAmount())
@@ -213,6 +218,8 @@ namespace ApplicationNo1.Menu_
         }
 
         #endregion
+
+        [MenuItemActionAttribute("ShowUsers")]
         public void ShowUsers()
         {
             if (CheckUsersAmount())
@@ -223,6 +230,24 @@ namespace ApplicationNo1.Menu_
             //BACK TO MENU - update current menu
             MenuGoBackOneStep();
         }
+
+        [MenuItemActionAttribute("RandomTest")]
+        public void RandomTest()
+        {
+            Type type = typeof(Menu);
+            MethodInfo[] methods = type.GetMethods();
+
+            foreach (var method in methods)
+            {
+                // Check if the method has the custom attribute
+                var attribute = method.GetCustomAttribute<MenuItemActionAttribute>();
+                if (attribute != null)
+                {
+                    Console.WriteLine(attribute.MethodName);
+                }
+            }
+        }
+        [MenuItemActionAttribute("CloseApp")]
         public void CloseApp()
         {
             Environment.Exit(0);
@@ -291,6 +316,13 @@ namespace ApplicationNo1.Menu_
                     Name = "Show Users",
                     UserSelection = 3,
                     UserSelectionAction = ShowUsers
+                },
+                new MenuItem()
+                {
+                    Id=Guid.NewGuid().ToString(),
+                    Name = "Random Test",
+                    UserSelection = 4,
+                    UserSelectionAction = RandomTest
                 },
                 new MenuItem()
                 {
@@ -390,7 +422,6 @@ namespace ApplicationNo1.Menu_
         #endregion
 
         #region Input & Validations
-
         private object GetUserInput(InputValidationTypes validationType)
         {
             var input = GenericInputChecks(Console.ReadLine());
@@ -447,7 +478,6 @@ namespace ApplicationNo1.Menu_
         #endregion
 
         #region Utilities
-
         private void InsertWriteLine(string originalWriteLine, bool insertInputDefaults = false)
         {
             var test = insertInputDefaults ? " [MAIN MENU -> Type MAIN MENU] [PREVIOUS MENU -> Type GO BACK]\n" : "";
@@ -498,7 +528,6 @@ namespace ApplicationNo1.Menu_
                     $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
             }
         }
-
         private void PrintTripStepList()
         {
             InsertWriteLine("---TRIP---");
@@ -520,4 +549,5 @@ namespace ApplicationNo1.Menu_
         #endregion
     }
 }
+
 
