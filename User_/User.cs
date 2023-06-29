@@ -19,8 +19,8 @@ namespace ApplicationNo1.User_
         public string? Id { get; set; }
         public string? Name { get; set; }
         public int Age { get; set; }
-        public IWallet? IWallet { get { return _iwallet; } set { _iwallet = value; } }
-        public IVehicle? IVehicle { get { return _ivehicle; } set { _ivehicle = value; } }
+        public IWallet? Wallet { get { return _iwallet; } set { _iwallet = value; } }
+        public IVehicle? Vehicle { get { return _ivehicle; } set { _ivehicle = value; } }
         public Country StartingCountry { get { return _startingCountry; } }
         public Country CurrentCountry { get { return _currentCountry; } }
         public DateTime CreationTime { get; set; }

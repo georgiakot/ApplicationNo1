@@ -98,8 +98,8 @@ namespace ApplicationNo1.Menu_
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
                 Age = age,
-                IVehicle = vehicle,
-                IWallet = wallet,
+                Vehicle = vehicle,
+                Wallet = wallet,
                 CreationTime = creationTime,
             });
 
@@ -165,7 +165,7 @@ namespace ApplicationNo1.Menu_
         }
         public void ExecuteRefuel()
         {
-            InsertWriteLine($"Give cash to refuel. You have {_icurrentUser.IWallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.", true);
+            InsertWriteLine($"Give cash to refuel. You have {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.", true);
             var doubleInput = (double)GetUserInput(InputValidationTypes.Double);
 
             //Checks for money inside wallet
@@ -182,13 +182,12 @@ namespace ApplicationNo1.Menu_
                 {
                     case VehicleBase.RefuelResults.FuelOrderSatisfied:
 
-                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.IWallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
-                        InsertWriteLine($"You filled your {_icurrentUser.IVehicle.Name} with {_icurrentUser.IVehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.IVehicle.FuelLevel:0.##} L.");
+                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
+                        InsertWriteLine($"You filled your {_icurrentUser.Vehicle.Name} with {_icurrentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.Vehicle.FuelLevel:0.##} L.");
                         break;
                     case VehicleBase.RefuelResults.FuelOrderNotSatisfied:
-
-                        InsertWriteLine($"You paid {_icurrentUser.IVehicle.RefuelAmount * _icurrentUser.CurrentCountry.GasPrice:0.##} and your change is {_icurrentUser.IWallet.Change:0.##} {_icurrentUser.CurrentCountry.Currency}. You now have: {_icurrentUser.IWallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
-                        InsertWriteLine($"You filled your {_icurrentUser.IVehicle.Name} with {_icurrentUser.IVehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.IVehicle.FuelLevel:0.##} L.");
+                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
+                        InsertWriteLine($"You filled your {_icurrentUser.Vehicle.Name} with {_icurrentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.Vehicle.FuelLevel:0.##} L.");
                         break;
                 }
             }
@@ -201,8 +200,8 @@ namespace ApplicationNo1.Menu_
         }
         public void UserInfo()
         {
-            InsertWriteLine($"User :{_icurrentUser.Name} with ID {_icurrentUser.Id} has {_icurrentUser.IWallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}" +
-                $" and drove {_icurrentUser.IVehicle.KmCounter} km until {_icurrentUser.CurrentCountry.Name}.");
+            InsertWriteLine($"User :{_icurrentUser.Name} with ID {_icurrentUser.Id} has {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}" +
+                $" and drove {_icurrentUser.Vehicle.KmCounter} km until {_icurrentUser.CurrentCountry.Name}.");
 
             //Back to options of Select User
             MenuGoBackOneStep();
@@ -496,7 +495,7 @@ namespace ApplicationNo1.Menu_
             {
                 var index = UserService.Instance.IUsersList.IndexOf(user) + 1;
                 InsertWriteLine($"{index}) Name:{user.Name},ID {user.Id}, Age:{user.Age}, Starting destination: {user.StartingCountry.Name}, " +
-                    $"Vehicle: {user.IVehicle.Name}, Money Balance: {user.IWallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
+                    $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
             }
         }
 

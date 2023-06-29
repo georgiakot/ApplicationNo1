@@ -48,7 +48,7 @@ namespace ApplicationNo1.Trip_
                 _trips.Add(new Trip() 
                 { 
                     UserID = user.Id,
-                    UserVehicle = user.IVehicle,
+                    UserVehicle = user.Vehicle,
                     Steps = new List<TripStep>() 
                     { 
                         new TripStep() 

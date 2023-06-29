@@ -13,8 +13,8 @@ namespace ApplicationNo1.User_
         string? Id { get; set; }
         string? Name { get; set; }
         int Age { get; set; }
-        IWallet IWallet { get; set; }
-        IVehicle IVehicle { get; set; }
+        IWallet Wallet { get; set; }
+        IVehicle Vehicle { get; set; }
         Country StartingCountry { get; }
         Country CurrentCountry { get; }
         DateTime CreationTime { get; set; }

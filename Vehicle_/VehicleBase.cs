@@ -41,13 +41,13 @@
 
                 _refuel = moneyRequired / gasPrice;
                 _fuelLevel = _maxFuel;
-                return RefuelResults.TooMuchMoneyNeedsChange;
+                return RefuelResults.FuelOrderNotSatisfied;
             }
             else
             {
                 _refuel = money / gasPrice;
                 _fuelLevel += _refuel;
-                return RefuelResults.NoChange;
+                return RefuelResults.FuelOrderSatisfied;
             }
         }
 
