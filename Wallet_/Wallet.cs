@@ -1,24 +1,27 @@
 ﻿namespace ApplicationNo1.Wallet_
 {
-    public class Wallet
+    public class Wallet : IWallet
     {
         #region Fields
 
         private double _balance;
+        private double _change;
         private Dictionary<int, double> _transactionsHistory;
 
         #endregion
 
         #region Properties
-        public double Balance { get { return _balance; } set { _balance = value; } }
-        public Dictionary<int, double> TransactionsHistory { get { return _transactionsHistory; } set { _transactionsHistory = value; } }
+        public double Balance { get { return _balance; } }
+        public double Change { get { return _change; } }
+        public Dictionary<int, double> TransactionsHistory { get { return _transactionsHistory; } }
 
         #endregion
 
         #region Constructor
-        public Wallet()
+        public Wallet(double cash)
         {
-            _balance = 0;
+            _balance = cash;
+            _change = 0;
             _transactionsHistory = new Dictionary<int, double>();
         }
         #endregion
@@ -32,7 +35,19 @@
                 _balance -= cash;
                 AddPaymentToDictionary(cash);
             }
+        }
 
+        public void GivesChange(double cash, double moneyRequired)
+        {
+            if(!SurpassesWalletLimit(cash))
+            {
+                if(cash >= moneyRequired)
+                {
+                    _change = cash - moneyRequired;
+                    _balance -= moneyRequired;
+                    AddPaymentToDictionary(moneyRequired);
+                }
+            }
         }
 
         public void AddPaymentToDictionary(double payment)
@@ -42,6 +57,7 @@
             //Adds the payment to dictionary
             _transactionsHistory.Add(transactionNumber, payment);
         }
+        
         public bool ChecksMoneyAvailable(double cash)
         {
             return !SurpassesWalletLimit(cash);
@@ -51,10 +67,7 @@
         {
             return cash > _balance;
         }
-
-
         #endregion
-
 
     }
 }

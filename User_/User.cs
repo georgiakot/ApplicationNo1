@@ -9,41 +9,35 @@ namespace ApplicationNo1.User_
     public class User : IUser
     {
         #region Fields
-        private Wallet? _wallet;
-        private IVehicle? _vehicle;
+        private IWallet? _iwallet;
+        private IVehicle? _ivehicle;
         private Country? _currentCountry;
         private Country? _startingCountry;
-        private ITrip? _trip;
         #endregion
 
         #region Properties
         public string? Id { get; set; }
         public string? Name { get; set; }
         public int Age { get; set; }
-        public Wallet Wallet { get { return _wallet; } set { _wallet = value; } }
-        public IVehicle? IVehicle { get { return _vehicle; } set { _vehicle = value; } }
+        public IWallet? IWallet { get { return _iwallet; } set { _iwallet = value; } }
+        public IVehicle? IVehicle { get { return _ivehicle; } set { _ivehicle = value; } }
         public Country StartingCountry { get { return _startingCountry; } }
         public Country CurrentCountry { get { return _currentCountry; } }
-        public ITrip? Trip { get { return _trip; } set { _trip = value; } }
         public DateTime CreationTime { get; set; }
         #endregion
 
         #region Constructor
         public User(Country startingCountry)
-        {
+        {                                     
             _startingCountry = startingCountry;
             _currentCountry = startingCountry;
-            _vehicle = null;
-            _trip = new Trip();
-            _wallet = new Wallet();
-            _currentCountry = new Country();
         }
         #endregion
 
         #region Methods
         public bool Drive(double distance, Country countryDestination)
         {
-            var result = IVehicle.Drive(distance);
+            var result = _ivehicle.Drive(distance);
 
             if (result)
             {
@@ -59,7 +53,22 @@ namespace ApplicationNo1.User_
 
         public RefuelResults Refuel(double money)
         {
-           return IVehicle.Refuel(money, CurrentCountry.GasPrice);
+           return _ivehicle.Refuel(money, CurrentCountry.GasPrice);
+        }
+
+        public bool CheckBalance(double cash)
+        {
+            return _iwallet.ChecksMoneyAvailable(cash);
+        }
+
+        public void Payment(double cash)
+        {
+            _iwallet.Payment(cash);
+        }
+
+        public void PaymentWithChange(double cash,double moneyRequired)
+        {
+            _iwallet.GivesChange(cash, moneyRequired);
         }
         #endregion
         

@@ -13,9 +13,8 @@ namespace ApplicationNo1.User_
         string? Id { get; set; }
         string? Name { get; set; }
         int Age { get; set; }
-        Wallet Wallet { get; set; }
+        IWallet IWallet { get; set; }
         IVehicle IVehicle { get; set; }
-        ITrip? Trip { get; set; }
         Country StartingCountry { get; }
         Country CurrentCountry { get; }
         DateTime CreationTime { get; set; }
@@ -24,6 +23,9 @@ namespace ApplicationNo1.User_
         #region Methods
         bool Drive(double distance, Country countryDestination);
         RefuelResults Refuel(double money);
+        bool CheckBalance(double cash);
+        void Payment(double cash);
+        void PaymentWithChange(double cash, double moneyRequired);
         #endregion
 
     }
