@@ -72,7 +72,7 @@ namespace ApplicationNo1.Menu_
             MenuOptions();
         }
 
-        [MenuItemActionAttribute("CreateNewUser")]
+        [MenuItemAction("CreateNewUser")]
         public void CreateNewUser()
         {
             //Name Input
@@ -112,7 +112,7 @@ namespace ApplicationNo1.Menu_
             MenuGoBackOneStep();
         }
 
-        [MenuItemActionAttribute("SelectUser")]
+        [MenuItemAction("SelectUser")]
         public void SelectUser()
         {
             if (CheckUsersAmount())
@@ -219,7 +219,7 @@ namespace ApplicationNo1.Menu_
 
         #endregion
 
-        [MenuItemActionAttribute("ShowUsers")]
+        [MenuItemAction("ShowUsers")]
         public void ShowUsers()
         {
             if (CheckUsersAmount())
@@ -231,7 +231,7 @@ namespace ApplicationNo1.Menu_
             MenuGoBackOneStep();
         }
 
-        [MenuItemActionAttribute("RandomTest")]
+        [MenuItemAction("RandomTest")]
         public void RandomTest()
         {
             var type = typeof(Menu);
@@ -243,11 +243,14 @@ namespace ApplicationNo1.Menu_
                 var attribute = method.GetCustomAttribute<MenuItemActionAttribute>();
                 if (attribute != null)
                 {
-                    Console.WriteLine(attribute.MethodName);
+                    InsertWriteLine(attribute.MethodName);
                 }
             }
+
+            //BACK TO MENU - update current menu
+            MenuGoBackOneStep();
         }
-        [MenuItemActionAttribute("CloseApp")]
+        [MenuItemAction("CloseApp")]
         public void CloseApp()
         {
             Environment.Exit(0);
