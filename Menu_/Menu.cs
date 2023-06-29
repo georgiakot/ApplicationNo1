@@ -173,22 +173,19 @@ namespace ApplicationNo1.Menu_
 
             if (walletCheck)
             {
+                //Run Refuel and Pay
                 var results = _icurrentUser.Refuel(doubleInput);
+                _icurrentUser.PaymentForFuel();
 
+                //Inform Application User
                 switch (results)
                 {
-                    case VehicleBase.RefuelResults.NoChange:
-
-                        //Payment
-                        _icurrentUser.Payment(doubleInput);
+                    case VehicleBase.RefuelResults.FuelOrderSatisfied:
 
                         InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.IWallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
                         InsertWriteLine($"You filled your {_icurrentUser.IVehicle.Name} with {_icurrentUser.IVehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.IVehicle.FuelLevel:0.##} L.");
                         break;
-                    case VehicleBase.RefuelResults.TooMuchMoneyNeedsChange:
-
-                        //Payment
-                        _icurrentUser.PaymentWithChange(doubleInput, _icurrentUser.IVehicle.RefuelAmount * _icurrentUser.CurrentCountry.GasPrice);
+                    case VehicleBase.RefuelResults.FuelOrderNotSatisfied:
 
                         InsertWriteLine($"You paid {_icurrentUser.IVehicle.RefuelAmount * _icurrentUser.CurrentCountry.GasPrice:0.##} and your change is {_icurrentUser.IWallet.Change:0.##} {_icurrentUser.CurrentCountry.Currency}. You now have: {_icurrentUser.IWallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
                         InsertWriteLine($"You filled your {_icurrentUser.IVehicle.Name} with {_icurrentUser.IVehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.IVehicle.FuelLevel:0.##} L.");

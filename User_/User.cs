@@ -51,9 +51,9 @@ namespace ApplicationNo1.User_
             return result;
         }
 
-        public RefuelResults Refuel(double money)
+        public RefuelResults Refuel(double orderForRefuelAmountInMoney)
         {
-           return _ivehicle.Refuel(money, CurrentCountry.GasPrice);
+           return _ivehicle.Refuel(orderForRefuelAmountInMoney, CurrentCountry.GasPrice);
         }
 
         public bool CheckBalance(double cash)
@@ -61,14 +61,9 @@ namespace ApplicationNo1.User_
             return _iwallet.ChecksMoneyAvailable(cash);
         }
 
-        public void Payment(double cash)
+        public void PaymentForFuel()
         {
-            _iwallet.Payment(cash);
-        }
-
-        public void PaymentWithChange(double cash,double moneyRequired)
-        {
-            _iwallet.GivesChange(cash, moneyRequired);
+            _iwallet.Payment(_ivehicle.RefuelAmount * _currentCountry.GasPrice);
         }
         #endregion
         

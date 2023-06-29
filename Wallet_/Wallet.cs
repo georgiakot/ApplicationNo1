@@ -37,19 +37,6 @@
             }
         }
 
-        public void GivesChange(double cash, double moneyRequired)
-        {
-            if(!SurpassesWalletLimit(cash))
-            {
-                if(cash >= moneyRequired)
-                {
-                    _change = cash - moneyRequired;
-                    _balance -= moneyRequired;
-                    AddPaymentToDictionary(moneyRequired);
-                }
-            }
-        }
-
         public void AddPaymentToDictionary(double payment)
         {
             //Gets transactionNumber

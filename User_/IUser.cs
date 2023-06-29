@@ -22,10 +22,9 @@ namespace ApplicationNo1.User_
 
         #region Methods
         bool Drive(double distance, Country countryDestination);
-        RefuelResults Refuel(double money);
+        RefuelResults Refuel(double orderForRefuelAmountInMoney);
         bool CheckBalance(double cash);
-        void Payment(double cash);
-        void PaymentWithChange(double cash, double moneyRequired);
+        void PaymentForFuel();
         #endregion
 
     }

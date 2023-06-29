@@ -12,8 +12,6 @@
         #region Methods
         void Payment(double cash);
 
-        void GivesChange(double cash, double moneyRequired);
-
         void AddPaymentToDictionary(double payment);
 
         bool ChecksMoneyAvailable(double cash);

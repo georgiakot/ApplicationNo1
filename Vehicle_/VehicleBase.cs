@@ -86,8 +86,8 @@
 
         public enum RefuelResults
         {
-            TooMuchMoneyNeedsChange,
-            NoChange
+            FuelOrderNotSatisfied,
+            FuelOrderSatisfied
         }
 
         public enum DriveResults
