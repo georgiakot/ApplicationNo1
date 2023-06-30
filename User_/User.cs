@@ -9,6 +9,7 @@ namespace ApplicationNo1.User_
     public class User : IUser
     {
         #region Fields
+        private ITripService _itripService;
         private IWallet? _iwallet;
         private IVehicle? _ivehicle;
         private Country? _currentCountry;
@@ -27,10 +28,11 @@ namespace ApplicationNo1.User_
         #endregion
 
         #region Constructor
-        public User(Country startingCountry)
+        public User(Country startingCountry, ITripService itripService)
         {                                     
             _startingCountry = startingCountry;
             _currentCountry = startingCountry;
+            _itripService = itripService;
         }
         #endregion
 
@@ -42,7 +44,7 @@ namespace ApplicationNo1.User_
             if (result)
             {
                 //Update Trip
-                TripService.Instance.AddNewTripStep(distance, countryDestination, this);
+                _itripService.AddNewTripStep(distance, countryDestination, this);
 
                 //Update Current Country
                 _currentCountry = countryDestination;

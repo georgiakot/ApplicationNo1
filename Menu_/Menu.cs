@@ -11,14 +11,17 @@ namespace ApplicationNo1.Menu_
     {
         #region Fields
         private IUser? _icurrentUser;
+        private IUserService _iuserService;
+        private ITripService _itripService;
         private MenuItem? _currentMenu;
         private MenuItem? _mainMenu;
         #endregion
 
         #region Constructor
-        public Menu()
+        public Menu(IUserService iuserService, ITripService itripService)
         {
-           
+            _iuserService = iuserService;
+            _itripService = itripService;
         }
         #endregion
 
@@ -96,7 +99,7 @@ namespace ApplicationNo1.Menu_
             var creationTime = DateTime.UtcNow;
 
             //Adds user to user list
-            UserService.Instance.AddNewUser(new User(country)
+            _iuserService.AddNewUser(new User(country, _itripService)
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
@@ -125,7 +128,7 @@ namespace ApplicationNo1.Menu_
 
                     var input = (string)GetUserInput(InputValidationTypes.None);
 
-                    var userSelected = UserService.Instance.IUsersList.FirstOrDefault(x => x.Name == input);
+                    var userSelected = _iuserService.Users.FirstOrDefault(x => x.Name == input);
 
                     if (userSelected != null)
                     {
@@ -160,7 +163,7 @@ namespace ApplicationNo1.Menu_
             if (checkDrive)
             {
                 InsertWriteLine($"You drove {input} km from {_icurrentUser.StartingCountry.Name}.");
-                PrintTripStepList();
+                PrintTripsList();
             }
             else
                 InsertWriteLine("There is not enough fuel to drive this distance.");
@@ -470,7 +473,7 @@ namespace ApplicationNo1.Menu_
         }
         public bool CheckUsersAmount()
         {
-            if (UserService.Instance.IUsersList.Count == 0)
+            if (_iuserService.Users.Count == 0)
             {
                 InsertWriteLine("Zero users in the system.\n");
                 return false;
@@ -524,19 +527,19 @@ namespace ApplicationNo1.Menu_
         private void PrintsUserList()
         {
             InsertWriteLine("---USERS---");
-            foreach (var user in UserService.Instance.IUsersList)
+            foreach (var user in _iuserService.Users)
             {
-                var index = UserService.Instance.IUsersList.IndexOf(user) + 1;
+                var index = _iuserService.Users.IndexOf(user) + 1;
                 InsertWriteLine($"{index}) Name:{user.Name},ID {user.Id}, Age:{user.Age}, Starting destination: {user.StartingCountry.Name}, " +
                     $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
             }
         }
-        private void PrintTripStepList()
+        private void PrintTripsList()
         {
-            InsertWriteLine("---TRIP---");
-            foreach (var trip in TripService.Instance.Trips)
+            InsertWriteLine("---TRIPS OF ALL USERS---");
+            foreach (var trip in _itripService.Trips)
             {
-                var index = TripService.Instance.Trips.IndexOf(trip) + 1;
+                var index = _itripService.Trips.IndexOf(trip) + 1;
                 InsertWriteLine($"{index}) UserID: {trip.UserID}, Total distance driven: {trip.TotalDistance} km, Vehicle: {trip.UserVehicle.Name}.");
             }
         }

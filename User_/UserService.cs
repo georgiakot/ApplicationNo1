@@ -1,8 +1,28 @@
 ﻿namespace ApplicationNo1.User_
 {
-    public class UserService
+    public class UserService : IUserService
     {
+        private List<IUser> _iusersList;
 
+        public UserService()
+        {
+            _iusersList = new List<IUser>();
+        }
+
+        public List<IUser> Users { get { return _iusersList; } }
+
+        public void AddNewUser(IUser User)
+        {
+            _iusersList.Add(User);
+        }
+
+    }
+}
+
+//SINGLETON PATTERN SOLUTION
+
+/*
+ 
         private static UserService? _instance;
         private List<IUser> _iusersList;
 
@@ -29,6 +49,4 @@
         {
             _iusersList.Add(User);
         }
-
-    }
-}
+*/
