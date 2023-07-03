@@ -19,13 +19,5 @@ namespace ApplicationNo1.User_
         Country CurrentCountry { get; }
         DateTime CreationTime { get; set; }
         #endregion
-
-        #region Methods
-        bool Drive(double distance, Country countryDestination);
-        RefuelResults Refuel(double orderForRefuelAmountInMoney);
-        bool CheckBalance(double cash);
-        void PaymentForFuel();
-        #endregion
-
     }
 }

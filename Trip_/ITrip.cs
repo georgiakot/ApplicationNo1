@@ -10,6 +10,5 @@ namespace ApplicationNo1.Trip_
         List<TripStep> Steps { get; set; }
         double TotalDistance { get; }
         #endregion
-
     }
 }

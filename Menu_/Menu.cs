@@ -13,15 +13,17 @@ namespace ApplicationNo1.Menu_
         #region Fields
         private IUser? _icurrentUser;
         private IUserService _userService;
+        private IUserUtilitiesService _userUtilitiesService;
         private ITripService _tripService;
         private MenuItem? _currentMenu;
         private MenuItem? _mainMenu;
         #endregion
 
         #region Constructor
-        public Menu(IUserService userService, ITripService tripService)
+        public Menu(IUserService userService, IUserUtilitiesService userUtilitiesService, ITripService tripService)
         {
             _userService = userService;
+            _userUtilitiesService = userUtilitiesService;
             _tripService = tripService;
         }
         #endregion
@@ -102,7 +104,7 @@ namespace ApplicationNo1.Menu_
             var creationTime = DateTime.UtcNow;
 
             //Adds user to user list
-            _userService.AddNewUser(new User(country, _tripService)
+            _userService.AddNewUser(new User(country)
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
@@ -161,7 +163,7 @@ namespace ApplicationNo1.Menu_
 
             InsertWriteLine("What is your final destination? Choose: ");
 
-            var checkDrive = _icurrentUser.Drive(input, CountrySelection());
+            var checkDrive = _userUtilitiesService.Drive(input, CountrySelection());
 
             if (checkDrive)
             {
@@ -180,13 +182,13 @@ namespace ApplicationNo1.Menu_
             var doubleInput = (double)GetUserInput(InputValidationTypes.Double);
 
             //Checks for money inside wallet
-            var walletCheck = _icurrentUser.CheckBalance(doubleInput);
+            var walletCheck = _userUtilitiesService.CheckBalance(doubleInput);
 
             if (walletCheck)
             {
                 //Run Refuel and Pay
-                var results = _icurrentUser.Refuel(doubleInput);
-                _icurrentUser.PaymentForFuel();
+                var results = _userUtilitiesService.Refuel(doubleInput);
+                _userUtilitiesService.PaymentForFuel();
 
                 //Inform Application User
                 switch (results)

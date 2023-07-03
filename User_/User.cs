@@ -1,19 +1,16 @@
 ﻿using ApplicationNo1.Country_;
-using ApplicationNo1.Trip_;
 using ApplicationNo1.Vehicle_;
 using ApplicationNo1.Wallet_;
-using static ApplicationNo1.Vehicle_.VehicleBase;
 
 namespace ApplicationNo1.User_
 {
     public class User : IUser
     {
         #region Fields
-        private ITripService _tripService;
-        private IWallet? _iwallet;
-        private IVehicle? _ivehicle;
-        private Country? _currentCountry;
-        private Country? _startingCountry;
+        protected IWallet? _iwallet;
+        protected IVehicle? _ivehicle;
+        protected Country? _currentCountry;
+        protected Country? _startingCountry;
         #endregion
 
         #region Properties
@@ -28,46 +25,12 @@ namespace ApplicationNo1.User_
         #endregion
 
         #region Constructor
-        public User(Country startingCountry, ITripService tripService)
+        public User(Country startingCountry)
         {                                     
             _startingCountry = startingCountry;
             _currentCountry = startingCountry;
-            _tripService = tripService;
         }
         #endregion
 
-        #region Methods
-        public bool Drive(double distance, Country countryDestination)
-        {
-            var result = _ivehicle.Drive(distance);
-
-            if (result)
-            {
-                //Update Trip
-                _tripService.AddNewTripStep(distance, countryDestination, this);
-
-                //Update Current Country
-                _currentCountry = countryDestination;
-            }
-
-            return result;
-        }
-
-        public RefuelResults Refuel(double orderForRefuelAmountInMoney)
-        {
-           return _ivehicle.Refuel(orderForRefuelAmountInMoney, CurrentCountry.GasPrice);
-        }
-
-        public bool CheckBalance(double cash)
-        {
-            return _iwallet.ChecksMoneyAvailable(cash);
-        }
-
-        public void PaymentForFuel()
-        {
-            _iwallet.Payment(_ivehicle.RefuelAmount * _currentCountry.GasPrice);
-        }
-        #endregion
-        
     }
 }

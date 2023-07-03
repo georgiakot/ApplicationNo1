@@ -12,6 +12,7 @@ builder.Services.AddHostedService<Menu>();
 
 //Register
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserUtilitiesService, UserUtilitiesService>();
 builder.Services.AddScoped<ITripService, TripService>();
 
 

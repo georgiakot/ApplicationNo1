@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-
-namespace ApplicationNo1.User_
+﻿namespace ApplicationNo1.User_
 {
     public class UserService : IUserService
     {
