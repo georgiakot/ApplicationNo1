@@ -1,5 +1,7 @@
 ﻿using ApplicationNo1.Trip_;
 using ApplicationNo1.User_;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ApplicationNo1.Menu_
 {
@@ -7,8 +9,13 @@ namespace ApplicationNo1.Menu_
     {
         static void Main(string[] args)
         {
-            var menu = new Menu(new UserService(),new TripService());
-            menu.Start();
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder();
+            
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITripService, TripService>();
+
+            using IHost host = builder.Build();
+            host.Run();
         }
     }
 }

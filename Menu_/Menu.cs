@@ -4,6 +4,7 @@ using ApplicationNo1.Wallet_;
 using ApplicationNo1.User_;
 using ApplicationNo1.Trip_;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 
 namespace ApplicationNo1.Menu_
 {
@@ -11,17 +12,17 @@ namespace ApplicationNo1.Menu_
     {
         #region Fields
         private IUser? _icurrentUser;
-        private IUserService _iuserService;
-        private ITripService _itripService;
+        private IUserService _userService;
+        private ITripService _tripService;
         private MenuItem? _currentMenu;
         private MenuItem? _mainMenu;
         #endregion
 
         #region Constructor
-        public Menu(IUserService iuserService, ITripService itripService)
+        public Menu(IUserService userService, ITripService tripService)
         {
-            _iuserService = iuserService;
-            _itripService = itripService;
+            _userService = userService;
+            _tripService = tripService;
         }
         #endregion
 
@@ -99,7 +100,7 @@ namespace ApplicationNo1.Menu_
             var creationTime = DateTime.UtcNow;
 
             //Adds user to user list
-            _iuserService.AddNewUser(new User(country, _itripService)
+            _userService.AddNewUser(new User(country, _tripService)
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = name,
@@ -128,7 +129,7 @@ namespace ApplicationNo1.Menu_
 
                     var input = (string)GetUserInput(InputValidationTypes.None);
 
-                    var userSelected = _iuserService.Users.FirstOrDefault(x => x.Name == input);
+                    var userSelected = _userService.Users.FirstOrDefault(x => x.Name == input);
 
                     if (userSelected != null)
                     {
@@ -473,7 +474,7 @@ namespace ApplicationNo1.Menu_
         }
         public bool CheckUsersAmount()
         {
-            if (_iuserService.Users.Count == 0)
+            if (_userService.Users.Count == 0)
             {
                 InsertWriteLine("Zero users in the system.\n");
                 return false;
@@ -527,9 +528,9 @@ namespace ApplicationNo1.Menu_
         private void PrintsUserList()
         {
             InsertWriteLine("---USERS---");
-            foreach (var user in _iuserService.Users)
+            foreach (var user in _userService.Users)
             {
-                var index = _iuserService.Users.IndexOf(user) + 1;
+                var index = _userService.Users.IndexOf(user) + 1;
                 InsertWriteLine($"{index}) Name:{user.Name},ID {user.Id}, Age:{user.Age}, Starting destination: {user.StartingCountry.Name}, " +
                     $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
             }
@@ -537,9 +538,9 @@ namespace ApplicationNo1.Menu_
         private void PrintTripsList()
         {
             InsertWriteLine("---TRIPS OF ALL USERS---");
-            foreach (var trip in _itripService.Trips)
+            foreach (var trip in _tripService.Trips)
             {
-                var index = _itripService.Trips.IndexOf(trip) + 1;
+                var index = _tripService.Trips.IndexOf(trip) + 1;
                 InsertWriteLine($"{index}) UserID: {trip.UserID}, Total distance driven: {trip.TotalDistance} km, Vehicle: {trip.UserVehicle.Name}.");
             }
         }
