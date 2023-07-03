@@ -2,7 +2,6 @@
 using ApplicationNo1.Trip_;
 using ApplicationNo1.Vehicle_;
 using ApplicationNo1.Wallet_;
-using static ApplicationNo1.Vehicle_.VehicleBase;
 
 namespace ApplicationNo1.User_
 {

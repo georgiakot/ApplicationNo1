@@ -178,28 +178,29 @@ namespace ApplicationNo1.Menu_
         }
         public void ExecuteRefuel()
         {
-            InsertWriteLine($"Give cash to refuel. You have {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.", true);
+            InsertWriteLine($"Give cash to refuel. You have {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}.", true);
             var doubleInput = (double)GetUserInput(InputValidationTypes.Double);
 
             //Checks for money inside wallet
-            var walletCheck = _userUtilitiesService.CheckBalance(doubleInput);
+            var walletCheck = _userUtilitiesService.CheckBalance(doubleInput, _icurrentUser.Id);
 
             if (walletCheck)
             {
                 //Run Refuel and Pay
-                var results = _userUtilitiesService.Refuel(doubleInput);
-                _userUtilitiesService.PaymentForFuel();
+                var results = _userUtilitiesService.Refuel(doubleInput, _icurrentUser.Id);
+                _userUtilitiesService.PaymentForFuel(_icurrentUser.Id);
 
                 //Inform Application User
+               
                 switch (results)
                 {
                     case VehicleBase.RefuelResults.FuelOrderSatisfied:
 
-                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
+                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}.");
                         InsertWriteLine($"You filled your {_icurrentUser.Vehicle.Name} with {_icurrentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.Vehicle.FuelLevel:0.##} L.");
                         break;
                     case VehicleBase.RefuelResults.FuelOrderNotSatisfied:
-                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}.");
+                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}.");
                         InsertWriteLine($"You filled your {_icurrentUser.Vehicle.Name} with {_icurrentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.Vehicle.FuelLevel:0.##} L.");
                         break;
                 }
@@ -213,8 +214,8 @@ namespace ApplicationNo1.Menu_
         }
         public void UserInfo()
         {
-            InsertWriteLine($"User :{_icurrentUser.Name} with ID {_icurrentUser.Id} has {_icurrentUser.Wallet.Balance:0.##} {_icurrentUser.CurrentCountry.Currency}" +
-                $" and drove {_icurrentUser.Vehicle.KmCounter} km until {_icurrentUser.CurrentCountry.Name}.");
+            InsertWriteLine($"User :{_icurrentUser.Name} with ID {_icurrentUser.Id} has {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}" +
+                $" and drove {_icurrentUser.Vehicle.KmCounter} km until {_userService.GetUserCurrentCountry(_icurrentUser.Id).Name}.");
 
             //Back to options of Select User
             MenuGoBackOneStep();
@@ -536,7 +537,7 @@ namespace ApplicationNo1.Menu_
             {
                 var index = _userService.Users.IndexOf(user) + 1;
                 InsertWriteLine($"{index}) Name:{user.Name},ID {user.Id}, Age:{user.Age}, Starting destination: {user.StartingCountry.Name}, " +
-                    $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {user.CurrentCountry.Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
+                    $"Vehicle: {user.Vehicle.Name}, Money Balance: {user.Wallet.Balance} {_userService.GetUserCurrentCountry(user.Id).Currency}, Created:{user.CreationTime.ToString("h:mm:ss tt")}");
             }
         }
         private void PrintTripsList()

@@ -9,7 +9,6 @@ namespace ApplicationNo1.User_
         #region Fields
         protected IWallet? _iwallet;
         protected IVehicle? _ivehicle;
-        protected Country? _currentCountry;
         protected Country? _startingCountry;
         #endregion
 
@@ -27,7 +26,6 @@ namespace ApplicationNo1.User_
         public User(Country startingCountry)
         {                                     
             _startingCountry = startingCountry;
-            _currentCountry = startingCountry;
         }
         #endregion
 

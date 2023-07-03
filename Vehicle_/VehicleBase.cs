@@ -87,7 +87,8 @@
         public enum RefuelResults
         {
             FuelOrderNotSatisfied,
-            FuelOrderSatisfied
+            FuelOrderSatisfied,
+            Failure
         }
 
         public enum DriveResults

@@ -1,5 +1,6 @@
 ﻿using ApplicationNo1.Country_;
 using ApplicationNo1.Trip_;
+using ApplicationNo1.Vehicle_;
 using static ApplicationNo1.Vehicle_.VehicleBase;
 
 namespace ApplicationNo1.User_
@@ -19,6 +20,7 @@ namespace ApplicationNo1.User_
         public bool Drive(double distance, Country countryDestination, string userId)
         {
             var user = _userService.GetUserById(userId);
+
             if (user != null)
             {
                 var result = user.Vehicle.Drive(distance);
@@ -30,24 +32,51 @@ namespace ApplicationNo1.User_
                 }
                 return result;
             }
-
-            return false;
-
+            else
+            {
+                return false;
+            }
         }
 
-        public RefuelResults Refuel(double orderForRefuelAmountInMoney)
+        public RefuelResults Refuel(double orderForRefuelAmountInMoney, string userId)
         {
-            return _ivehicle.Refuel(orderForRefuelAmountInMoney, CurrentCountry.GasPrice);
+            var user = _userService.GetUserById(userId);
+            var country = _userService.GetUserCurrentCountry(userId);
+
+            if (user != null && country != null)
+            {
+                return user.Vehicle.Refuel(orderForRefuelAmountInMoney, country.GasPrice);
+            }
+            else
+            {
+                return RefuelResults.Failure;
+            }
         }
 
-        public bool CheckBalance(double cash)
+        public bool CheckBalance(double cash, string userId)
         {
-            return _iwallet.ChecksMoneyAvailable(cash);
+            var user = _userService.GetUserById(userId);
+
+            if (user != null) 
+            {
+                return user.Wallet.ChecksMoneyAvailable(cash);
+            }
+            else
+            { 
+                return false; 
+            }
+            
         }
 
-        public void PaymentForFuel()
+        public void PaymentForFuel(string userId)
         {
-            _iwallet.Payment(_ivehicle.RefuelAmount * _currentCountry.GasPrice);
+            var user = _userService.GetUserById(userId);
+            var country = _userService.GetUserCurrentCountry(userId);
+
+            if (user != null && country != null)                
+            {
+                user.Wallet.Payment(user.Vehicle.RefuelAmount * country.GasPrice);
+            }
         }
     }
 }

@@ -6,8 +6,8 @@ namespace ApplicationNo1.User_
     public interface IUserUtilitiesService
     {
         bool Drive(double distance, Country countryDestination, string userId);
-        RefuelResults Refuel(double orderForRefuelAmountInMoney);
-        bool CheckBalance(double cash);
-        void PaymentForFuel();
+        RefuelResults Refuel(double orderForRefuelAmountInMoney,string userId);
+        bool CheckBalance(double cash, string userId);
+        void PaymentForFuel(string userId);
     }
 }

@@ -1,14 +1,17 @@
 ﻿using ApplicationNo1.Country_;
+using ApplicationNo1.Trip_;
 
 namespace ApplicationNo1.User_
 {
     public class UserService : IUserService
     {
         private List<IUser> _iusersList;
+        private ITripService _tripService;
 
-        public UserService()
+        public UserService(ITripService tripService)
         {
             _iusersList = new List<IUser>();
+            _tripService = tripService;
         }
 
         public List<IUser> Users { get { return _iusersList; } }
@@ -24,13 +27,15 @@ namespace ApplicationNo1.User_
         }
 
         public Country GetUserCurrentCountry(string userId)
-        { 
-            
-            //Call Trip Service For User Id
-
-            //Get Last Trip Step, and the Country landed
-
-            //Return That country
+        {
+            if(_tripService.Trips.Count == 0)
+            {
+                return GetUserById(userId).StartingCountry;
+            }
+            else
+            {
+                return _tripService.Trips.FirstOrDefault(x => x.UserID == userId).Steps.Last().CountryLanded;
+            }
         }
 
     }
