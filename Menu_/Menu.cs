@@ -11,7 +11,7 @@ namespace ApplicationNo1.Menu_
     public class Menu : BackgroundService
     {
         #region Fields
-        private IUser? _icurrentUser;
+        private IUser? _currentUser;
         private IUserService _userService;
         private IUserUtilitiesService _userUtilitiesService;
         private ITripService _tripService;
@@ -74,7 +74,7 @@ namespace ApplicationNo1.Menu_
         public void MainMenuAction()
         {
             #region Clear Stuff in Memory
-            _icurrentUser = null;
+            _currentUser = null;
             #endregion
 
             MenuOptions();
@@ -125,7 +125,7 @@ namespace ApplicationNo1.Menu_
         {
             if (CheckUsersAmount())
             {
-                if (_icurrentUser == null)
+                if (_currentUser == null)
                 {
                     PrintsUserList();
 
@@ -146,7 +146,7 @@ namespace ApplicationNo1.Menu_
                     }
 
                     //Update chosen user
-                    _icurrentUser = userSelected;
+                    _currentUser = userSelected;
                 }
                 //SUBMENU
                 MenuOptions();
@@ -163,11 +163,11 @@ namespace ApplicationNo1.Menu_
 
             InsertWriteLine("What is your final destination? Choose: ");
 
-            var checkDrive = _userUtilitiesService.Drive(input, CountrySelection(), _icurrentUser.Id);
+            var checkDrive = _userUtilitiesService.Drive(input, CountrySelection(), _currentUser.Id);
 
             if (checkDrive)
             {
-                InsertWriteLine($"You drove {input} km from {_icurrentUser.StartingCountry.Name}.");
+                InsertWriteLine($"You drove {input} km from {_currentUser.StartingCountry.Name}.");
                 PrintTripsList();
             }
             else
@@ -178,17 +178,17 @@ namespace ApplicationNo1.Menu_
         }
         public void ExecuteRefuel()
         {
-            InsertWriteLine($"Give cash to refuel. You have {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}.", true);
+            InsertWriteLine($"Give cash to refuel. You have {_currentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_currentUser.Id).Currency}.", true);
             var doubleInput = (double)GetUserInput(InputValidationTypes.Double);
 
             //Checks for money inside wallet
-            var walletCheck = _userUtilitiesService.CheckBalance(doubleInput, _icurrentUser.Id);
+            var walletCheck = _userUtilitiesService.CheckBalance(doubleInput, _currentUser.Id);
 
             if (walletCheck)
             {
                 //Run Refuel and Pay
-                var results = _userUtilitiesService.Refuel(doubleInput, _icurrentUser.Id);
-                _userUtilitiesService.PaymentForFuel(_icurrentUser.Id);
+                var results = _userUtilitiesService.Refuel(doubleInput, _currentUser.Id);
+                _userUtilitiesService.PaymentForFuel(_currentUser.Id);
 
                 //Inform Application User
                
@@ -196,12 +196,12 @@ namespace ApplicationNo1.Menu_
                 {
                     case VehicleBase.RefuelResults.FuelOrderSatisfied:
 
-                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}.");
-                        InsertWriteLine($"You filled your {_icurrentUser.Vehicle.Name} with {_icurrentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.Vehicle.FuelLevel:0.##} L.");
+                        InsertWriteLine($"Payment was succesfull. You now have: {_currentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_currentUser.Id).Currency}.");
+                        InsertWriteLine($"You filled your {_currentUser.Vehicle.Name} with {_currentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_currentUser.Vehicle.FuelLevel:0.##} L.");
                         break;
                     case VehicleBase.RefuelResults.FuelOrderNotSatisfied:
-                        InsertWriteLine($"Payment was succesfull. You now have: {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}.");
-                        InsertWriteLine($"You filled your {_icurrentUser.Vehicle.Name} with {_icurrentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_icurrentUser.Vehicle.FuelLevel:0.##} L.");
+                        InsertWriteLine($"Payment was succesfull. You now have: {_currentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_currentUser.Id).Currency}.");
+                        InsertWriteLine($"You filled your {_currentUser.Vehicle.Name} with {_currentUser.Vehicle.RefuelAmount:0.##} L and the new level of fuel is: {_currentUser.Vehicle.FuelLevel:0.##} L.");
                         break;
                 }
             }
@@ -214,15 +214,15 @@ namespace ApplicationNo1.Menu_
         }
         public void UserInfo()
         {
-            InsertWriteLine($"User :{_icurrentUser.Name} with ID {_icurrentUser.Id} has {_icurrentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_icurrentUser.Id).Currency}" +
-                $" and drove {_icurrentUser.Vehicle.KmCounter} km until {_userService.GetUserCurrentCountry(_icurrentUser.Id).Name}.");
+            InsertWriteLine($"User :{_currentUser.Name} with ID {_currentUser.Id} has {_currentUser.Wallet.Balance:0.##} {_userService.GetUserCurrentCountry(_currentUser.Id).Currency}" +
+                $" and drove {_currentUser.Vehicle.KmCounter} km until {_userService.GetUserCurrentCountry(_currentUser.Id).Name}.");
 
             //Back to options of Select User
             MenuGoBackOneStep();
         }
         public void SelectNewUser()
         {
-            _icurrentUser = null;
+            _currentUser = null;
             MenuGoBackOneStep();
         }
 
