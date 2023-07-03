@@ -43,14 +43,7 @@ namespace ApplicationNo1.User_
             var user = _userService.GetUserById(userId);
             var country = _userService.GetUserCurrentCountry(userId);
 
-            if (user != null && country != null)
-            {
-                return user.Vehicle.Refuel(orderForRefuelAmountInMoney, country.GasPrice);
-            }
-            else
-            {
-                return RefuelResults.Failure;
-            }
+            return user.Vehicle.Refuel(orderForRefuelAmountInMoney, country.GasPrice);
         }
 
         public bool CheckBalance(double cash, string userId)
