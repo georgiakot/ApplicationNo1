@@ -13,9 +13,9 @@ namespace ApplicationNo1.User_
 
         public List<IUser> Users { get { return _iusersList; } }
 
-        public void AddNewUser(IUser User)
+        public void AddNewUser(IUser user)
         {
-            _iusersList.Add(User);
+            _iusersList.Add(user);
         }
 
     }

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace ApplicationNo1.Menu_
 {
-    public class Menu
+    public class Menu : BackgroundService
     {
         #region Fields
         private IUser? _icurrentUser;
@@ -27,7 +27,8 @@ namespace ApplicationNo1.Menu_
         #endregion
 
         #region Methods
-        public void Start()
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             //Initialize Menu
             InitializeMenu();
@@ -36,6 +37,7 @@ namespace ApplicationNo1.Menu_
             _currentMenu.UserSelectionAction();
 
         }
+
         public void MenuOptions()
         {
             //Get Current Menu

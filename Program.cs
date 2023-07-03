@@ -2,20 +2,19 @@
 using ApplicationNo1.User_;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using ApplicationNo1.Menu_;
 
-namespace ApplicationNo1.Menu_
-{
-    public class Program
-    {
-        static void Main(string[] args)
-        {
-            HostApplicationBuilder builder = Host.CreateApplicationBuilder();
-            
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<ITripService, TripService>();
+HostApplicationBuilder builder = Host.CreateApplicationBuilder();
 
-            using IHost host = builder.Build();
-            host.Run();
-        }
-    }
-}
+
+builder.Services.AddHostedService<Menu>();
+
+
+//Register
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITripService, TripService>();
+
+
+
+using IHost host = builder.Build();
+host.Run();
