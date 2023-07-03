@@ -20,7 +20,6 @@ namespace ApplicationNo1.User_
         public IWallet? Wallet { get { return _iwallet; } set { _iwallet = value; } }
         public IVehicle? Vehicle { get { return _ivehicle; } set { _ivehicle = value; } }
         public Country StartingCountry { get { return _startingCountry; } }
-        public Country CurrentCountry { get { return _currentCountry; } }
         public DateTime CreationTime { get; set; }
         #endregion
 

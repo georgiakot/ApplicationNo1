@@ -8,7 +8,6 @@ namespace ApplicationNo1.User_
 {
     public interface IUser
     {
-       
         #region Properties
         string? Id { get; set; }
         string? Name { get; set; }
@@ -16,7 +15,6 @@ namespace ApplicationNo1.User_
         IWallet Wallet { get; set; }
         IVehicle Vehicle { get; set; }
         Country StartingCountry { get; }
-        Country CurrentCountry { get; }
         DateTime CreationTime { get; set; }
         #endregion
     }

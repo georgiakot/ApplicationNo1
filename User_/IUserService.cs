@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using ApplicationNo1.Country_;
+using Microsoft.Extensions.Hosting;
 
 namespace ApplicationNo1.User_
 { 
@@ -6,5 +7,7 @@ namespace ApplicationNo1.User_
     {
         List<IUser> Users {  get; }
         void AddNewUser(IUser User);
+        IUser GetUserById(string userId);
+        Country GetUserCurrentCountry(string userId);
     }
 }

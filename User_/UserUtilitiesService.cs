@@ -4,29 +4,35 @@ using static ApplicationNo1.Vehicle_.VehicleBase;
 
 namespace ApplicationNo1.User_
 { 
-    public class UserUtilitiesService : User, IUserUtilitiesService
+    public class UserUtilitiesService : IUserUtilitiesService
     {
         private ITripService _tripService;
+        private IUserService _userService;
 
-        public UserUtilitiesService(Country startingCountry,ITripService tripService) : base(startingCountry)
+        public UserUtilitiesService(ITripService tripService, IUserService userService)
         {
             _tripService = tripService;
+            _userService = userService;
         }
 
 
-        public bool Drive(double distance, Country countryDestination)
+        public bool Drive(double distance, Country countryDestination, string userId)
         {
-            var result = _ivehicle.Drive(distance);
-
-            if (result)
+            var user = _userService.GetUserById(userId);
+            if (user != null)
             {
-                //Update Trip
-                _tripService.AddNewTripStep(distance, countryDestination, this);
+                var result = user.Vehicle.Drive(distance);
 
-                //Update Current Country
-                _currentCountry = countryDestination;
+                if (result)
+                {
+                    //Update Trip
+                    _tripService.AddNewTripStep(distance, countryDestination, user);
+                }
+                return result;
             }
-            return result;
+
+            return false;
+
         }
 
         public RefuelResults Refuel(double orderForRefuelAmountInMoney)

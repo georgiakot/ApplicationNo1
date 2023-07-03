@@ -163,7 +163,7 @@ namespace ApplicationNo1.Menu_
 
             InsertWriteLine("What is your final destination? Choose: ");
 
-            var checkDrive = _userUtilitiesService.Drive(input, CountrySelection());
+            var checkDrive = _userUtilitiesService.Drive(input, CountrySelection(), _icurrentUser.Id);
 
             if (checkDrive)
             {
