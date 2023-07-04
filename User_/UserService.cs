@@ -5,17 +5,24 @@ namespace ApplicationNo1.User_
 {
     public class UserService : IUserService
     {
+        #region Fields
         private List<IUser> _iusersList;
         private ITripService _tripService;
+        #endregion
 
+        #region Constructor
         public UserService(ITripService tripService)
         {
             _iusersList = new List<IUser>();
             _tripService = tripService;
         }
+        #endregion
 
+        #region Properties
         public List<IUser> Users { get { return _iusersList; } }
+        #endregion
 
+        #region Methods
         public void AddNewUser(IUser user)
         {
             _iusersList.Add(user);
@@ -28,7 +35,7 @@ namespace ApplicationNo1.User_
 
         public Country GetUserCurrentCountry(string userId)
         {
-            if(_tripService.Trips.Count == 0)
+            if (_tripService.Trips.Count == 0)
             {
                 return GetUserById(userId).StartingCountry;
             }
@@ -37,11 +44,12 @@ namespace ApplicationNo1.User_
                 return _tripService.Trips.FirstOrDefault(x => x.UserID == userId).Steps.Last().CountryLanded;
             }
         }
-
+        #endregion
     }
 }
 
-//SINGLETON PATTERN SOLUTION
+
+#region Singleton Pattern Solution
 
 /*
  
@@ -72,3 +80,6 @@ namespace ApplicationNo1.User_
             _iusersList.Add(User);
         }
 */
+#endregion
+
+

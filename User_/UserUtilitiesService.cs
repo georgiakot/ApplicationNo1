@@ -1,22 +1,25 @@
 ﻿using ApplicationNo1.Country_;
 using ApplicationNo1.Trip_;
-using ApplicationNo1.Vehicle_;
 using static ApplicationNo1.Vehicle_.VehicleBase;
 
 namespace ApplicationNo1.User_
 { 
     public class UserUtilitiesService : IUserUtilitiesService
     {
+        #region Fields
         private ITripService _tripService;
         private IUserService _userService;
+        #endregion
 
+        #region Constructor
         public UserUtilitiesService(ITripService tripService, IUserService userService)
         {
             _tripService = tripService;
             _userService = userService;
         }
+        #endregion
 
-
+        #region Methods
         public bool Drive(double distance, Country countryDestination, string userId)
         {
             var user = _userService.GetUserById(userId);
@@ -50,15 +53,15 @@ namespace ApplicationNo1.User_
         {
             var user = _userService.GetUserById(userId);
 
-            if (user != null) 
+            if (user != null)
             {
                 return user.Wallet.ChecksMoneyAvailable(cash);
             }
             else
-            { 
-                return false; 
+            {
+                return false;
             }
-            
+
         }
 
         public void PaymentForFuel(string userId)
@@ -66,10 +69,12 @@ namespace ApplicationNo1.User_
             var user = _userService.GetUserById(userId);
             var country = _userService.GetUserCurrentCountry(userId);
 
-            if (user != null && country != null)                
+            if (user != null && country != null)
             {
                 user.Wallet.Payment(user.Vehicle.RefuelAmount * country.GasPrice);
             }
         }
+        #endregion
+
     }
 }

@@ -5,9 +5,12 @@ namespace ApplicationNo1.User_
 { 
     public interface IUserUtilitiesService
     {
+        #region Methods
         bool Drive(double distance, Country countryDestination, string userId);
-        RefuelResults Refuel(double orderForRefuelAmountInMoney,string userId);
+        RefuelResults Refuel(double orderForRefuelAmountInMoney, string userId);
         bool CheckBalance(double cash, string userId);
         void PaymentForFuel(string userId);
+        #endregion
+
     }
 }

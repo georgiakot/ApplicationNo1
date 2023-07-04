@@ -5,16 +5,23 @@ namespace ApplicationNo1.Trip_
 {
     public class TripService : ITripService
     {
+        #region Fields
         private List<ITrip> _trips;
+        #endregion
 
-        public TripService() 
+        #region Constructor
+        public TripService()
         {
             _trips = new List<ITrip>();
         }
 
+        #endregion
 
+        #region Properties
         public List<ITrip> Trips { get { return _trips; } }
+        #endregion
 
+        #region Methods
         public void AddNewTrip(ITrip trip)
         {
             _trips.Add(trip);
@@ -33,16 +40,16 @@ namespace ApplicationNo1.Trip_
             else
             {
                 //Create new Trip with first default step 0 Distance and starting country
-                _trips.Add(new Trip() 
-                { 
+                _trips.Add(new Trip()
+                {
                     UserID = user.Id,
                     UserVehicle = user.Vehicle,
-                    Steps = new List<TripStep>() 
-                    { 
-                        new TripStep() 
-                        { 
-                            CountryLanded = user.StartingCountry, 
-                            DistanceTraveled = 0 
+                    Steps = new List<TripStep>()
+                    {
+                        new TripStep()
+                        {
+                            CountryLanded = user.StartingCountry,
+                            DistanceTraveled = 0
                         },
                         new TripStep()
                         {
@@ -53,9 +60,12 @@ namespace ApplicationNo1.Trip_
                 });
             }
         }
+        #endregion
     }
 }
 
+
+#region Singleton Pattern
 /*
  *  private static TripService? _instance;
         private List<ITrip> _trips;
@@ -118,3 +128,4 @@ namespace ApplicationNo1.Trip_
             }
         }
 */
+#endregion

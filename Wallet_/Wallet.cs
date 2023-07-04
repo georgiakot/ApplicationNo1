@@ -55,6 +55,5 @@
             return cash > _balance;
         }
         #endregion
-
     }
 }
