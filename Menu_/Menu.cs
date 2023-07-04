@@ -85,7 +85,7 @@ namespace ApplicationNo1.Menu_
         {
             //Name Input
             InsertWriteLine("Give name: ");
-            var name = (string)GetUserInput(InputValidationTypes.None);
+            var name = (string)GetUserInput(InputValidationTypes.Username);
 
             //Age Input
             InsertWriteLine("Give age: ");
@@ -452,6 +452,11 @@ namespace ApplicationNo1.Menu_
                     if (IntConversionSuccess)
                         return numberInt;
                     break;
+                case InputValidationTypes.Username:
+                    var checkExistingUsername = _userService.Users.Any(x => x.Name == input);
+                    if(!checkExistingUsername)
+                        return input;
+                    break;
                 case InputValidationTypes.None:
                     return input;
             }
@@ -556,7 +561,8 @@ namespace ApplicationNo1.Menu_
         {
             None,
             Double,
-            Int
+            Int,
+            Username
         }
         #endregion
     }
